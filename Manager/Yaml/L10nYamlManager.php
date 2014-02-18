@@ -13,6 +13,13 @@ use Symfony\Component\Yaml\Yaml;
 class L10nYamlManager implements L10nManagerInterface
 {
     const URI_PREFIX = '#';
+    const NS = 'l10n:';
+    const ATTR_ID = '@id';
+    const ATTR_LANGUAGE = '@language';
+    const ATTR_VALUE = '@value';
+    const ROOT = '@graph';
+
+
     /**
      * Path to YAML file
      * @@TODO : config
@@ -30,24 +37,26 @@ class L10nYamlManager implements L10nManagerInterface
     {
         $data = Yaml::parse(__DIR__ . $this->dataFile);
 
-        if (!isset($data['@graph'])) {
-            throw new \InvalidArgumentException('Missing "@graph" entry');
+        if (!isset($data[self::ROOT])) {
+            throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
         }
 
         $values = array();
-        $resourceList = $data['@graph'];
+        $resourceList = $data[self::ROOT];
 
         foreach($resourceList as $resource) {
-            if ($resource['l10n:key']['@id'] == self::URI_PREFIX . $idResource && $resource['l10n:localisation']['@id'] == self::URI_PREFIX . $idLocalisation) {
-                $valueList = $resource['l10n:value'];
+            if ($resource[self::NS . 'key'][self::ATTR_ID] == self::URI_PREFIX . $idResource
+                    && $resource[self::NS . 'localisation'][self::ATTR_ID] == self::URI_PREFIX . $idLocalisation
+                ) {
+                $valueList = $resource[self::NS . 'value'];
                 if (!is_array($valueList)) {
                     break;
                 }
                 foreach ($valueList as $value) {
-                    if (isset($value['@language'])) {
-                        $values[$value['@language']] = $value['@value'];
+                    if (isset($value[self::ATTR_LANGUAGE])) {
+                        $values[$value[self::ATTR_LANGUAGE]] = $value[self::ATTR_VALUE];
                     } else {
-                        $values[] = $value['@value'];
+                        $values[] = $value[self::ATTR_VALUE];
                     }
                 }
                 break;
