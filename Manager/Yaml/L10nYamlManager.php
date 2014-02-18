@@ -65,4 +65,18 @@ class L10nYamlManager implements L10nManagerInterface
 
         return $values;
     }
+
+    /**
+     * Dummy method to respect interface
+     *
+     * @param mixed $idResource
+     * @param mixed $idLocalisation
+     * @param array $valueList : list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
+
+     * @throws Exception
+     */
+    function setL10nResource($idResource, $idLocalisation, $valueList) {
+        throw new \Exception('Can\'t save data in a YAML source');
+    }
+
 }
