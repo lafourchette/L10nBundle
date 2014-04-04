@@ -62,6 +62,52 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testSetL10nResource()
+    {
+        $idResource = 'another_id';
+        $idLocalisation = 'idLoc';
+
+        $valueList =  array('fr-fr' => 'autre value fr', 'en-gb' => 'other value en');
+        $valueMongoList =  array(
+                array('language' => 'fr-fr', 'value' => 'autre value fr'),
+                array('language' => 'en-gb', 'value' => 'other value en')
+        );
+
+        $l10nManager = new L10nMongoDbManager();
+        $l10nCollection = $this->getMock('\MongoCollection', array('update'), array(), '', null);
+        $l10nCollection
+            ->expects($this->once())
+            ->method('update')
+            ->with(
+                array('id_resource' => $idResource, 'id_localisation' => $idLocalisation),
+                array(
+                        'id_resource' => $idResource,
+                        'id_localisation' => $idLocalisation,
+                        'value_list' => $valueMongoList
+                    ),
+                array('upsert' => true)
+                )
+        ;
+
+        $mongoDb = $this->getMock('\MongoDb', array('__get'), array(), '', null);
+        $mongoDb
+            ->expects($this->once())
+            ->method('__get')
+            ->with('L10nResource')
+            ->will($this->returnValue($l10nCollection))
+        ;
+
+        $l10nManager = new L10nMongoDbManager();
+
+
+        $l10nMongoDbManagerReflection = new \ReflectionClass('L10nBundle\Manager\MongoDb\L10nMongoDbManager');
+        $prop = $l10nMongoDbManagerReflection->getProperty('db');
+        $prop->setAccessible(true);
+        $prop->setValue($l10nManager, $mongoDb);
+
+        $l10nManager->setL10nResource($idResource, $idLocalisation, $valueList);
+
+    }
 
 
 }

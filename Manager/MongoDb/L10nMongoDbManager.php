@@ -27,7 +27,7 @@ class L10nMongoDbManager implements L10nManagerInterface
     public function __construct()
     {
         $this->mongoClient = new \MongoClient();
-        $this->db = $this->mongoClient->selectDB('doctrine_odm');
+        $this->db = $this->mongoClient->selectDB('doctrine_odm'); //@@TODO : configure this
     }
 
    /**
@@ -70,6 +70,27 @@ class L10nMongoDbManager implements L10nManagerInterface
     public function setL10nResource($idResource, $idLocalisation, $valueList)
     {
 
+        $valueMongoList = array();
+        foreach ($valueList as $locale => $value) {
+            if ($locale) {
+                $valueMongoList[] = array(
+                            'language' => $locale,
+                            'value' => $value
+                        );
+            } else {
+                $valueMongoList[] = $value;
+            }
+        }
+        $l10nCollection = $this->db->L10nResource;
+        $l10nCollection->update(
+                array('id_resource' => (string)$idResource, 'id_localisation' => (string)$idLocalisation),
+                array(
+                        'id_resource' => (string)$idResource,
+                        'id_localisation' => (string)$idLocalisation,
+                        'value_list' => $valueMongoList
+                    ),
+                array('upsert' => true)
+            );
     }
 
 }
