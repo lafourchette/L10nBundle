@@ -16,7 +16,7 @@ interface L10nManagerInterface
     * @param mixed $idLocalisation
     * @return array $valueList
     */
-    function getL10nResource($idResource, $idLocalisation);
+    public function getL10nResource($idResource, $idLocalisation);
 
     /**
      * Save a L10nResource
@@ -26,5 +26,5 @@ interface L10nManagerInterface
 
      * @return (boolean ? object ?)
      */
-     function setL10nResource($idResource, $idLocalisation, $valueList);
+     public function setL10nResource($idResource, $idLocalisation, $valueList);
 }

@@ -33,7 +33,7 @@ class L10nYamlManager implements L10nManagerInterface
     * @param $idLocalisation
     * @return array $values
     */
-    function getL10nResource($idResource, $idLocalisation)
+    public function getL10nResource($idResource, $idLocalisation)
     {
         $data = Yaml::parse(__DIR__ . $this->dataFile);
 
@@ -75,7 +75,8 @@ class L10nYamlManager implements L10nManagerInterface
 
      * @throws Exception
      */
-    function setL10nResource($idResource, $idLocalisation, $valueList) {
+    public function setL10nResource($idResource, $idLocalisation, $valueList)
+    {
         throw new \Exception('Can\'t save data in a YAML source');
     }
 

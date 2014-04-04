@@ -3,6 +3,7 @@
 /* Static Mocking */
 namespace Symfony\Component\Yaml;
 
+
 class Yaml
 {
     public static function parse($input, $exceptionOnInvalidType = false, $objectSupport = false)
@@ -57,9 +58,7 @@ use L10nBundle\Manager\Yaml\L10nYamlManager;
 class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 {
 
-
-
-    function testGetL10nResource()
+    public function testGetL10nResource()
     {
         $idResource = 'key';
         $idLocalisation = 'idLoc';

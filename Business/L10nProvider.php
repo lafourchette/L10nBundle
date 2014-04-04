@@ -21,7 +21,7 @@ class L10nProvider
     /**
      * @param L10nManagerInterface $l10nManager
      */
-    function __construct(L10nManagerInterface $l10nManager)
+    public function __construct(L10nManagerInterface $l10nManager)
     {
         $this->l10nManager = $l10nManager;
     }
@@ -33,7 +33,7 @@ class L10nProvider
      * @param string $locale
      * @throws ResourceNotFoundException
      */
-    function getL10n($idResource, $idLocalisation, $locale = null)
+    public function getL10n($idResource, $idLocalisation, $locale = null)
     {
         $resource = $this->l10nManager->getL10nResource($idResource, $idLocalisation);
         if (!$resource) {
