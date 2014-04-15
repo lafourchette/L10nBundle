@@ -29,7 +29,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $l10nManager = new L10nMongoDbManager();
+        $l10nManager = $this->getMock('L10nBundle\Manager\MongoDb\L10nMongoDbManager', null, array(), 'L10nMongoDbManager', false);
         $l10nCollection = $this->getMock('\MongoCollection', array('findOne'), array(), '', null);
         $l10nCollection
             ->expects($this->once())
@@ -73,7 +73,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
                 array('language' => 'en-gb', 'value' => 'other value en')
         );
 
-        $l10nManager = new L10nMongoDbManager();
+        $l10nManager = $this->getMock('L10nBundle\Manager\MongoDb\L10nMongoDbManager', null, array(), 'L10nMongoDbManager', false);
         $l10nCollection = $this->getMock('\MongoCollection', array('update'), array(), '', null);
         $l10nCollection
             ->expects($this->once())
@@ -96,9 +96,6 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
             ->with('L10nResource')
             ->will($this->returnValue($l10nCollection))
         ;
-
-        $l10nManager = new L10nMongoDbManager();
-
 
         $l10nMongoDbManagerReflection = new \ReflectionClass('L10nBundle\Manager\MongoDb\L10nMongoDbManager');
         $prop = $l10nMongoDbManagerReflection->getProperty('db');

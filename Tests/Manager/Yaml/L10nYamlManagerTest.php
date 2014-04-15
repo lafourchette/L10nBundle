@@ -65,7 +65,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 
         $l10nResource = new L10nResource();
 
-        $l10nManager = new L10nYamlManager();
+        $l10nManager = new L10nYamlManager('someDataFile');
         $values = $l10nManager->getL10nResource($idResource, $idLocalisation);
 
         $expected = array

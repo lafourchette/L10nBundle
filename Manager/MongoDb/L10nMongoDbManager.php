@@ -24,10 +24,17 @@ class L10nMongoDbManager implements L10nManagerInterface
     protected  $db;
 
 
-    public function __construct()
+    /**
+     * @param string $host
+     * @param string $port
+     * @param string $username
+     * @param string $password
+     * @param string $database
+     */
+    public function __construct($host, $port, $username, $password, $database)
     {
-        $this->mongoClient = new \MongoClient();
-        $this->db = $this->mongoClient->selectDB('doctrine_odm'); //@@TODO : configure this
+        $this->mongoClient = new \MongoClient('mongodb://' . $username . ':' . $password . '@' . $host . ':' . $port);
+        $this->db = $this->mongoClient->selectDB($database);
     }
 
    /**

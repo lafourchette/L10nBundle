@@ -27,6 +27,14 @@ class L10nYamlManager implements L10nManagerInterface
      */
     protected $dataFile = '/../../Resources/data/data.yml';
 
+    /**
+     * @param string $dataFile
+     */
+    public function  __construct($dataFile)
+    {
+        $this->dataFile = $dataFile;
+    }
+
    /**
     * Return a L10nResource
     * @param $idResource
