@@ -41,7 +41,7 @@ class L10nMongoDbManager implements L10nManagerInterface
     * Return a L10nResource
     * @param $idResource
     * @param $idLocalisation
-    * @return array $values
+    * @return L10nResource $l10nResource
     */
     public function getL10nResource($idResource, $idLocalisation)
     {
@@ -50,7 +50,7 @@ class L10nMongoDbManager implements L10nManagerInterface
         $query = array('id_resource' => (string)$idResource, 'id_localisation' => (string)$idLocalisation);
         $l10nResult = $l10nCollection->findOne($query);
 
-        $result = null;
+        $l10nResource = null;
 
         if (count($l10nResult)) {
             $valueList = array();
@@ -62,21 +62,27 @@ class L10nMongoDbManager implements L10nManagerInterface
                     $valueList[] = $value['value'];
                 }
             }
+            $l10nResource = new L10nResource();
+            $l10nResource->setIdLocalisation($idLocalisation);
+            $l10nResource->setIdResource($idResource);
+            $l10nResource->setValueList($valueList);
         }
 
-        return $valueList;
+        return $l10nResource;
     }
 
     /**
      * Update a L10nResource
      *
-     * @param mixed $idResource
-     * @param mixed $idLocalisation
-     * @param array $valueList : list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
+     * @param L10nResource $l10nResource
+     *     which valueList is a list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
      */
-    public function setL10nResource($idResource, $idLocalisation, $valueList)
+    public function setL10nResource(L10nResource $l10nResource)
     {
 
+        $idResource = $l10nResource->getIdResource();
+        $idLocalisation = $l10nResource->getIdLocalisation();
+        $valueList = $l10nResource->getValueList();
         $valueMongoList = array();
         foreach ($valueList as $locale => $value) {
             if ($locale) {

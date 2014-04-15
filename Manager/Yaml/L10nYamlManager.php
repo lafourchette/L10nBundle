@@ -2,6 +2,8 @@
 
 namespace L10nBundle\Manager\Yaml;
 
+use L10nBundle\Entity\L10nResource;
+
 use L10nBundle\Manager\L10nManagerInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -39,7 +41,7 @@ class L10nYamlManager implements L10nManagerInterface
     * Return a L10nResource
     * @param $idResource
     * @param $idLocalisation
-    * @return array $values
+    * @return L10nResource $l10nResource
     */
     public function getL10nResource($idResource, $idLocalisation)
     {
@@ -71,19 +73,25 @@ class L10nYamlManager implements L10nManagerInterface
             }
         }
 
-        return $values;
+        $l10nResource = null;
+
+        if (count($values)) {
+            $l10nResource = new L10nResource();
+            $l10nResource->setIdLocalisation($idLocalisation);
+            $l10nResource->setIdResource($idResource);
+            $l10nResource->setValueList($values);
+        }
+
+        return $l10nResource;
     }
 
     /**
      * Dummy method to respect interface
      *
-     * @param mixed $idResource
-     * @param mixed $idLocalisation
-     * @param array $valueList : list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
-
+     * @param L10nResource $l10nResource
      * @throws Exception
      */
-    public function setL10nResource($idResource, $idLocalisation, $valueList)
+    public function setL10nResource(L10nResource $l10nResource)
     {
         throw new \Exception('Can\'t save data in a YAML source');
     }
