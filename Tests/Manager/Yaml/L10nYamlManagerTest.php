@@ -63,18 +63,22 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
         $idResource = 'key';
         $idLocalisation = 'idLoc';
 
-        $l10nResource = new L10nResource();
-
-        $l10nManager = new L10nYamlManager('someDataFile');
-        $values = $l10nManager->getL10nResource($idResource, $idLocalisation);
-
-        $expected = array
-            (
+        $valueList = array
+        (
                 'fr-fr' => 'autre value fr',
                 'en-gb' => 'other value en'
-            );
+        );
 
-        $this->assertEquals($expected, $values);
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalisation($idLocalisation);
+        $l10nResource->setIdResource($idResource);
+        $l10nResource->setValueList($valueList);
+
+        $l10nManager = new L10nYamlManager('someDataFile');
+        $result = $l10nManager->getL10nResource($idResource, $idLocalisation);
+
+
+        $this->assertEquals($l10nResource, $result);
 
     }
 

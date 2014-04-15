@@ -24,7 +24,7 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $l10nResource = new L10nResource();
 
 
-        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource'), array(), '', null);
+        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource'), array(), '', false);
         $l10nManager
             ->expects($this->once())
             ->method('getL10nResource')
@@ -47,7 +47,7 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $idResource = 'key';
         $idLocalisation = 'France';
 
-        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource'), array(), '', null);
+        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource'), array(), '', false);
         $l10nManager
             ->expects($this->once())
             ->method('getL10nResource')

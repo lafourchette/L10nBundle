@@ -2,6 +2,8 @@
 
 namespace L10nBundle\Manager;
 
+use L10nBundle\Entity\L10nResource;
+
 /**
  * @@TODO doc
  * @author Cyril Otal
@@ -14,7 +16,7 @@ interface L10nManagerInterface
     * Return a L10nResource
     * @param mixed $idResource
     * @param mixed $idLocalisation
-    * @return array $valueList
+    * @return L10nResource $l10nResource
     */
     public function getL10nResource($idResource, $idLocalisation);
 
@@ -26,5 +28,5 @@ interface L10nManagerInterface
 
      * @return (boolean ? object ?)
      */
-     public function setL10nResource($idResource, $idLocalisation, $valueList);
+     public function setL10nResource(L10nResource $l10nResource);
 }
