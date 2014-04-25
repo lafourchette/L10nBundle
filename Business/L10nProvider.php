@@ -2,10 +2,8 @@
 
 namespace L10nBundle\Business;
 
-use L10nBundle\Entity\L10nResource;
 
 use L10nBundle\Exception\ResourceNotFoundException;
-
 use L10nBundle\Manager\L10nManagerInterface;
 
 /**
@@ -56,7 +54,7 @@ class L10nProvider
     /**
      *
      * @param mixed $defaultLocalisation
-     * @return L10nResource
+     * @return L10nProvider
      */
     public function setDefaultLocalisation($defaultLocalisation)
     {
@@ -76,7 +74,7 @@ class L10nProvider
     /**
      *
      * @param string $defaultLocale
-     * @return L10nResource
+     * @return L10nProvider
      */
     public function setDefaultLocale($defaultLocale)
     {

@@ -2,12 +2,8 @@
 
 namespace L10nBundle\Manager\MongoDb;
 
-
-
 use L10nBundle\Entity\L10nResource;
-use L10nBundle\Manager\L10nManagerInterface;
 use L10nBundle\Manager\MongoDb\L10nMongoDbManager;
-
 
 /**
  * @author Cyril Otal

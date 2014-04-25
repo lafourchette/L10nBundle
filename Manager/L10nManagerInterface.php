@@ -22,8 +22,7 @@ interface L10nManagerInterface
 
     /**
      * Save a L10nResource
-     * @param mixed $idResource
-     * @param mixed $idLocalisation
+     * @param L10nResource $l10nResource
      * @param array $valueList : list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
 
      * @return (boolean ? object ?)

@@ -47,8 +47,6 @@ class Yaml
 namespace L10nBundle\Manager\Yaml;
 
 use L10nBundle\Entity\L10nResource;
-use L10nBundle\Exception\ResourceNotFoundException;
-use L10nBundle\Manager\L10nManagerInterface;
 use L10nBundle\Manager\Yaml\L10nYamlManager;
 
 /**
