@@ -16,6 +16,8 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('l10n_bundle');
         $rootNode
             ->children()
+                ->scalarNode('default_localisation')->isRequired()->end()
+                ->scalarNode('default_locale')->isRequired()->end()
                 ->scalarNode('manager')->isRequired()->end()
                 ->arrayNode('yaml')
                     ->prototype('array')
