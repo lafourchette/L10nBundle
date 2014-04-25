@@ -3,7 +3,6 @@
 namespace L10nBundle\Manager\Yaml;
 
 use L10nBundle\Entity\L10nResource;
-
 use L10nBundle\Manager\L10nManagerInterface;
 use Symfony\Component\Yaml\Yaml;
 
