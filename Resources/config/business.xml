@@ -10,6 +10,8 @@
     <services>
         <service id="l10n_bundle.business.l10n_provider" class="%l10n_bundle.business.l10n_provider.class%">
             <argument type="service" id="l10n_bundle.l10n_manager" />
+            <argument>%default_localisation%</argument>
+            <argument>%default_locale%</argument>
         </service>
     </services>
      
