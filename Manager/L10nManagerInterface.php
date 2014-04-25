@@ -23,7 +23,7 @@ interface L10nManagerInterface
     /**
      * Save a L10nResource
      * @param L10nResource $l10nResource
-     * @param array $valueList : list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
+     * which valueList is a list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
 
      * @return (boolean ? object ?)
      */
