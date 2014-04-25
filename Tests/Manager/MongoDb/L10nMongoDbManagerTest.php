@@ -24,15 +24,15 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
 
         $l10nResult = array(
             'values' => array(
-                    array('language' => 'fr-fr', 'value' => 'autre value fr'),
-                    array('language' => 'en-gb', 'value' => 'other value en')
+                    array('language' => 'fr-FR', 'value' => 'autre value fr'),
+                    array('language' => 'en-GB', 'value' => 'other value en')
                 )
             );
 
         $valueList = array
         (
-                'fr-fr' => 'autre value fr',
-                'en-gb' => 'other value en'
+                'fr-FR' => 'autre value fr',
+                'en-GB' => 'other value en'
         );
 
         $l10nResource = new L10nResource();
@@ -71,10 +71,10 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
         $idResource = 'another_id';
         $idLocalisation = 'idLoc';
 
-        $valueList =  array('fr-fr' => 'autre value fr', 'en-gb' => 'other value en');
+        $valueList =  array('fr-FR' => 'autre value fr', 'en-GB' => 'other value en');
         $valueMongoList =  array(
-                array('language' => 'fr-fr', 'value' => 'autre value fr'),
-                array('language' => 'en-gb', 'value' => 'other value en')
+                array('language' => 'fr-FR', 'value' => 'autre value fr'),
+                array('language' => 'en-GB', 'value' => 'other value en')
         );
 
         $l10nResource = new L10nResource();

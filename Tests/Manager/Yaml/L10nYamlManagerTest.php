@@ -26,12 +26,12 @@ class Yaml
                                 (
                                         array
                                         (
-                                                '@language' => 'fr-fr',
+                                                '@language' => 'fr-FR',
                                                 '@value' => 'autre value fr'
                                         ),
                                         array
                                         (
-                                                '@language' => 'en-gb',
+                                                '@language' => 'en-GB',
                                                 '@value' => 'other value en'
                                         )
                                 )
@@ -65,8 +65,8 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 
         $valueList = array
         (
-                'fr-fr' => 'autre value fr',
-                'en-gb' => 'other value en'
+                'fr-FR' => 'autre value fr',
+                'en-GB' => 'other value en'
         );
 
         $l10nResource = new L10nResource();
