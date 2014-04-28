@@ -23,10 +23,9 @@ class L10nYamlManager implements L10nManagerInterface
 
     /**
      * Path to YAML file
-     * @@TODO : config
      * @var string
      */
-    protected $dataFile = '/../../Resources/data/data.yml';
+    protected $dataFile;
 
     /**
      * @param string $dataFile
