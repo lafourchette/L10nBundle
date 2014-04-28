@@ -15,23 +15,23 @@ Currently, L10nBundle supports YaML file and MongoDb.
 Configuration
 -------------
 
-l10n:
-    default_localisation: 1 # The default IdLocalisation, used when no excplicit Localisation is asked
-    default_locale: fr_FR # The default locale, to manage I10N values
-    manager: l10n_bundle.manager.l10n_yaml # The service's name of the manager you want to use
+    l10n:
+        default_localisation: 1 # The default IdLocalisation, used when no excplicit Localisation is asked
+        default_locale: fr_FR # The default locale, to manage I10N values
+        manager: l10n_bundle.manager.l10n_yaml # The service's name of the manager you want to use
+        
+    # specific options for managers
     
-# specific options for managers
-
-# yaml
-    yaml:
-        data_file: /path/to/data.yaml
-
-        # mongodb
-    mongodb:
-        host: 127.0.0.1
-        port: 27017
-        username: test
-        password: T3$t
-        database: test_db
+    # yaml
+        yaml:
+            data_file: /path/to/data.yaml
+    
+            # mongodb
+        mongodb:
+            host: 127.0.0.1
+            port: 27017
+            username: test
+            password: T3$t
+            database: test_db
         
     
