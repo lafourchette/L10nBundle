@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-            <parameter key="l10n_bundle.manager.l10n_yaml.class">L10nBundle\Manager\L10nYamlManager</parameter>
-            <parameter key="l10n_bundle.manager.l10n_mongodb.class">L10nBundle\Manager\L10nMongoDbManager</parameter>
+            <parameter key="l10n_bundle.manager.l10n_yaml.class">L10nBundle\Manager\Yaml\L10nYamlManager</parameter>
+            <parameter key="l10n_bundle.manager.l10n_mongodb.class">L10nBundle\Manager\MongoDb\L10nMongoDbManager</parameter>
     </parameters>
         
     <services>
