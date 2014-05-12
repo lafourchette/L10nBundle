@@ -5,7 +5,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
 <rdfs:Class rdf:about="L10nResource">
-
+    <rdfs:label>L10nResource</rdfs:label>
+    <rdfs:comment xml:lang="en">A localized aspect of a resource. It's identified by a key and a localization id</rdfs:comment>
 </rdfs:Class>
 
 <rdf:Property rdf:about="key">
