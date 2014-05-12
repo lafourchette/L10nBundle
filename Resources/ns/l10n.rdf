@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<rdf:RDF
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdfs:Class rdf:about="L10nResource">
+
+</rdfs:Class>
+
+<rdf:Property rdf:about="key">
+    <rdfs:label>key</rdfs:label>
+    <rdfs:comment xml:lang="en">An identifier to define some resource to be localized</rdfs:comment>
+    <rdfs:domain rdf:resource="#L10nResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="localization">
+    <rdfs:label>localization</rdfs:label>
+    <rdfs:comment xml:lang="en">An identifier to define the localization, to localize the resource</rdfs:comment>
+    <rdfs:domain rdf:resource="#L10nResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="value">
+    <rdfs:label>value</rdfs:label>
+    <rdfs:comment xml:lang="en">The localized value. Might be internationnalized</rdfs:comment>
+    <rdfs:domain rdf:resource="#L10nResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Property>
+
+</rdf:RDF> 
