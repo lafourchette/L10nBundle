@@ -126,7 +126,6 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetL10nResource()
     {
         $l10nManager = new L10nYamlManager('someDataFile');
-        //var_dump($this->l10nManager);
         $result = $this->l10nManager->getL10nResource($this->idResource, $this->idLocalization);
 
         $this->assertEquals($this->l10nResource, $result);

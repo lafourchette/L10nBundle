@@ -49,7 +49,7 @@ class L10nYamlManager implements L10nManagerInterface
 
         $l10nResource = null;
 
-        if (count($resourceList)) {
+        if (!empty($resourceList)) {
             foreach($resourceList as $resource) {
                 if ($resource[self::NS . 'key'][self::ATTR_ID] == self::URI_PREFIX . $idResource
                         && $resource[self::NS . 'localization'][self::ATTR_ID] == self::URI_PREFIX . $idLocalization
@@ -70,8 +70,7 @@ class L10nYamlManager implements L10nManagerInterface
             }
         }
 
-
-        if (count($values)) {
+        if (!empty($values)) {
             $l10nResource = new L10nResource();
             $l10nResource->setIdLocalization($idLocalization);
             $l10nResource->setIdResource($idResource);
@@ -90,7 +89,7 @@ class L10nYamlManager implements L10nManagerInterface
         $resourceList = $this->getYamlResourceList();
         $l10nResourceList = array();
 
-        if (count($resourceList)) {
+        if (!empty($resourceList)) {
             foreach($resourceList as $resource) {
                 $values = array();
                 $idResource = preg_replace('/^' . self::URI_PREFIX . '/' , '', $resource[self::NS . 'key'][self::ATTR_ID]);
