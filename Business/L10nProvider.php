@@ -2,7 +2,6 @@
 
 namespace L10nBundle\Business;
 
-
 use L10nBundle\Exception\ResourceNotFoundException;
 use L10nBundle\Manager\L10nManagerInterface;
 
@@ -22,7 +21,7 @@ class L10nProvider
      *
      * @var mixed
      */
-    protected $defaultLocalisation;
+    protected $defaultLocalization;
 
     /**
      *
@@ -32,13 +31,13 @@ class L10nProvider
 
     /**
      * @param L10nManagerInterface $l10nManager
-     * @param mixed $defaultLocalisation
+     * @param mixed $defaultLocalization
      * @param mixed $defaultLocale
      */
-    public function __construct(L10nManagerInterface $l10nManager, $defaultLocalisation, $defaultLocale)
+    public function __construct(L10nManagerInterface $l10nManager, $defaultLocalization, $defaultLocale)
     {
         $this->l10nManager = $l10nManager;
-        $this->defaultLocalisation = $defaultLocalisation;
+        $this->defaultLocalization = $defaultLocalization;
         $this->defaultLocale = $defaultLocale;
     }
 
@@ -46,19 +45,19 @@ class L10nProvider
      *
      * @return mixed
      */
-    public function getDefaultLocalisation()
+    public function getDefaultLocalization()
     {
-        return $this->defaultLocalisation;
+        return $this->defaultLocalization;
     }
 
     /**
      *
-     * @param mixed $defaultLocalisation
+     * @param mixed $defaultLocalization
      * @return L10nProvider
      */
-    public function setDefaultLocalisation($defaultLocalisation)
+    public function setDefaultLocalization($defaultLocalization)
     {
-        $this->defaultLocalisation = $defaultLocalisation;
+        $this->defaultLocalization = $defaultLocalization;
         return $this;
     }
 
@@ -85,22 +84,22 @@ class L10nProvider
     /**
      * Return a localised value
      * @param mixed $idResource
-     * @param mixed $idLocalisation
+     * @param mixed $idLocalization
      * @param string $locale
      * @return string
      * @throws ResourceNotFoundException
      */
-    public function getL10n($idResource, $idLocalisation = null, $locale = null)
+    public function getL10n($idResource, $idLocalization = null, $locale = null)
     {
-        if (!$idLocalisation) {
-            $idLocalisation = $this->defaultLocalisation;
+        if (!$idLocalization) {
+            $idLocalization = $this->defaultLocalization;
         }
         if (!$locale) {
             $locale = $this->defaultLocale;
         }
-        $resource = $this->l10nManager->getL10nResource($idResource, $idLocalisation);
+        $resource = $this->l10nManager->getL10nResource($idResource, $idLocalization);
         if (!$resource) {
-            throw new ResourceNotFoundException(sprintf('Resource not found for idResource %s and idLocalisation %s', $idResource, $idLocalisation));
+            throw new ResourceNotFoundException(sprintf('Resource not found for idResource %s and idLocalization %s', $idResource, $idLocalization));
         }
         $valueList = $resource->getValueList();
 

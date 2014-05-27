@@ -20,19 +20,19 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideData
      */
-    public function testGetL10n($idResource, $idLocalisation, $idLocalisationAskedToManager, $locale, $defaultLocalisation, $defaultLocale, $l10nResource, $expected)
+    public function testGetL10n($idResource, $idLocalization, $idLocalizationAskedToManager, $locale, $defaultLocalization, $defaultLocale, $l10nResource, $expected)
     {
 
-        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource'), array(), '', false);
+        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource', 'getAllL10nResourceList'), array(), '', false);
         $l10nManager
             ->expects($this->once())
             ->method('getL10nResource')
-            ->with($idResource, $idLocalisationAskedToManager)
+            ->with($idResource, $idLocalizationAskedToManager)
             ->will($this->returnValue($l10nResource))
         ;
 
-        $l10nProvider = new L10nProvider($l10nManager, $defaultLocalisation, $defaultLocale);
-        $value = $l10nProvider->getL10n($idResource, $idLocalisation, $locale);
+        $l10nProvider = new L10nProvider($l10nManager, $defaultLocalization, $defaultLocale);
+        $value = $l10nProvider->getL10n($idResource, $idLocalization, $locale);
         $this->assertEquals($expected, $value);
 
     }
@@ -42,8 +42,8 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $return = array();
 
         $idResource = 'key';
-        $idLocalisation = 'France';
-        $defaultLocalisation = 'Japan';
+        $idLocalization = 'France';
+        $defaultLocalization = 'Japan';
         $defaultLocale = 'fr-BE';
         $locale = 'sl-SI';
 
@@ -54,17 +54,17 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $l10nResource->setValueList($valueList);
 
         // I18N Value
-        $return[] = array($idResource, $idLocalisation, $idLocalisation, $locale, $defaultLocalisation, $defaultLocale, $l10nResource, $value);
+        $return[] = array($idResource, $idLocalization, $idLocalization, $locale, $defaultLocalization, $defaultLocale, $l10nResource, $value);
 
         $l10nResource->setValueList(array($value));
 
         // non I18N value
-        $return[] = array($idResource, $idLocalisation, $idLocalisation, $locale, $defaultLocalisation, $defaultLocale, $l10nResource, $value);
+        $return[] = array($idResource, $idLocalization, $idLocalization, $locale, $defaultLocalization, $defaultLocale, $l10nResource, $value);
 
         $l10nResource->setValueList(array($defaultLocale => $value));
 
         // test fallbacks
-        $return[] = array($idResource, null, $defaultLocalisation, null, $defaultLocalisation, $defaultLocale, $l10nResource, $value);
+        $return[] = array($idResource, null, $defaultLocalization, null, $defaultLocalization, $defaultLocale, $l10nResource, $value);
 
         return $return;
     }
@@ -75,20 +75,20 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetL10nWithResourceNotFoundException()
     {
         $idResource = 'key';
-        $idLocalisation = 'France';
-        $defaultLocalisation = 'Japan';
+        $idLocalization = 'France';
+        $defaultLocalization = 'Japan';
         $defaultLocale = 'fr-BE';
 
-        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource'), array(), '', false);
+        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource', 'getAllL10nResourceList'), array(), '', false);
         $l10nManager
             ->expects($this->once())
             ->method('getL10nResource')
-            ->with($idResource, $idLocalisation)
+            ->with($idResource, $idLocalization)
             ->will($this->returnValue(null))
         ;
 
-        $l10nProvider = new L10nProvider($l10nManager, $defaultLocalisation, $defaultLocale);
-        $l10nProvider->getL10n($idResource, $idLocalisation);
+        $l10nProvider = new L10nProvider($l10nManager, $defaultLocalization, $defaultLocale);
+        $l10nProvider->getL10n($idResource, $idLocalization);
 
     }
 

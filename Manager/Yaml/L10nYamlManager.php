@@ -38,10 +38,10 @@ class L10nYamlManager implements L10nManagerInterface
    /**
     * Return a L10nResource
     * @param $idResource
-    * @param $idLocalisation
+    * @param $idLocalization
     * @return L10nResource $l10nResource
     */
-    public function getL10nResource($idResource, $idLocalisation)
+    public function getL10nResource($idResource, $idLocalization)
     {
         $data = Yaml::parse(__DIR__ . $this->dataFile);
 
@@ -51,11 +51,61 @@ class L10nYamlManager implements L10nManagerInterface
 
         $values = array();
         $resourceList = $data[self::ROOT];
+        $l10nResource = null;
 
-        foreach($resourceList as $resource) {
-            if ($resource[self::NS . 'key'][self::ATTR_ID] == self::URI_PREFIX . $idResource
-                    && $resource[self::NS . 'localisation'][self::ATTR_ID] == self::URI_PREFIX . $idLocalisation
-                ) {
+        if (count($resourceList)) {
+            foreach($resourceList as $resource) {
+                if ($resource[self::NS . 'key'][self::ATTR_ID] == self::URI_PREFIX . $idResource
+                        && $resource[self::NS . 'localization'][self::ATTR_ID] == self::URI_PREFIX . $idLocalization
+                    ) {
+                    $valueList = $resource[self::NS . 'value'];
+                    if (!is_array($valueList)) {
+                        break;
+                    }
+                    foreach ($valueList as $value) {
+                        if (isset($value[self::ATTR_LANGUAGE])) {
+                            $values[$value[self::ATTR_LANGUAGE]] = $value[self::ATTR_VALUE];
+                        } else {
+                            $values[] = $value[self::ATTR_VALUE];
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+
+        if (count($values)) {
+            $l10nResource = new L10nResource();
+            $l10nResource->setIdLocalization($idLocalization);
+            $l10nResource->setIdResource($idResource);
+            $l10nResource->setValueList($values);
+        }
+
+        return $l10nResource;
+    }
+
+    /**
+     * Return all L10nResources
+     * @return array<L10nResource> $l10nResource
+     */
+    public function getAllL10nResourceList()
+    {
+        $data = Yaml::parse(__DIR__ . $this->dataFile);
+
+        if (!isset($data[self::ROOT])) {
+            throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
+        }
+
+        $resourceList = $data[self::ROOT];
+        $l10nResourceList = array();
+
+        if (count($resourceList)) {
+            foreach($resourceList as $resource) {
+                $values = array();
+                $idResource = preg_replace('/^' . self::URI_PREFIX . '/' , '', $resource[self::NS . 'key'][self::ATTR_ID]);
+                $idLocalization = preg_replace('/^' . self::URI_PREFIX . '/' , '', $resource[self::NS . 'localization'][self::ATTR_ID]);
+
                 $valueList = $resource[self::NS . 'value'];
                 if (!is_array($valueList)) {
                     break;
@@ -67,20 +117,14 @@ class L10nYamlManager implements L10nManagerInterface
                         $values[] = $value[self::ATTR_VALUE];
                     }
                 }
-                break;
+                $l10nResource = new L10nResource();
+                $l10nResource->setIdLocalization($idLocalization);
+                $l10nResource->setIdResource($idResource);
+                $l10nResource->setValueList($values);
+                $l10nResourceList[] = $l10nResource;
             }
         }
-
-        $l10nResource = null;
-
-        if (count($values)) {
-            $l10nResource = new L10nResource();
-            $l10nResource->setIdLocalisation($idLocalisation);
-            $l10nResource->setIdResource($idResource);
-            $l10nResource->setValueList($values);
-        }
-
-        return $l10nResource;
+        return $l10nResourceList;
     }
 
     /**
