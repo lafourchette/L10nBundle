@@ -11,10 +11,10 @@ class L10nResource
     protected $idResource;
 
     /**
-     * ID of a localisation
+     * ID of a localization
      * @var mixed
      */
-    protected $idLocalisation;
+    protected $idLocalization;
 
     /**
      * List of L10n values
@@ -49,19 +49,19 @@ class L10nResource
      *
      * @return mixed
      */
-    public function getIdLocalisation()
+    public function getIdLocalization()
     {
-        return $this->idLocalisation;
+        return $this->idLocalization;
     }
 
     /**
      *
-     * @param mixed $idLocalisation
+     * @param mixed $idLocalization
      * @return L10nResource
      */
-    public function setIdLocalisation($idLocalisation)
+    public function setIdLocalization($idLocalization)
     {
-        $this->idLocalisation = $idLocalisation;
+        $this->idLocalization = $idLocalization;
         return $this;
     }
 

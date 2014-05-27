@@ -21,7 +21,7 @@ class L10nExtension extends Extension
         $loader->load('manager.xml');
         $loader->load('business.xml');
 
-        $container->setParameter('default_localisation', $config['default_localisation']);
+        $container->setParameter('default_localization', $config['default_localization']);
         $container->setParameter('default_locale', $config['default_locale']);
 
 

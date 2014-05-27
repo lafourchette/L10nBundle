@@ -3,7 +3,6 @@
 /* Static Mocking */
 namespace Symfony\Component\Yaml;
 
-
 class Yaml
 {
     public static function parse($input, $exceptionOnInvalidType = false, $objectSupport = false)
@@ -18,7 +17,7 @@ class Yaml
                                 (
                                         '@id' => '#key'
                                 ),
-                                'l10n:localisation' => array
+                                'l10n:localization' => array
                                 (
                                         '@id' => '#idLoc'
                                 ),
@@ -56,30 +55,55 @@ use L10nBundle\Manager\Yaml\L10nYamlManager;
 class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testGetL10nResource()
-    {
-        $idResource = 'key';
-        $idLocalisation = 'idLoc';
+    /**
+     *
+     * @var L10nResource
+     */
+    private $l10nResource;
 
-        $valueList = array
+    /**
+     *
+     * @var string
+     */
+    private $idResource = 'key';
+
+    /**
+     * @var string
+     */
+    private $idLocalization = 'idLoc';
+
+    /**
+     *
+     * @var array
+     */
+    private $valueList;
+
+    public function setUp()
+    {
+        $this->l10nResource = new L10nResource();
+        $this->valueList = array
         (
                 'fr-FR' => 'autre value fr',
                 'en-GB' => 'other value en'
         );
-
-        $l10nResource = new L10nResource();
-        $l10nResource->setIdLocalisation($idLocalisation);
-        $l10nResource->setIdResource($idResource);
-        $l10nResource->setValueList($valueList);
-
-        $l10nManager = new L10nYamlManager('someDataFile');
-        $result = $l10nManager->getL10nResource($idResource, $idLocalisation);
-
-
-        $this->assertEquals($l10nResource, $result);
-
+        $this->l10nResource->setIdLocalization($this->idLocalization);
+        $this->l10nResource->setIdResource($this->idResource);
+        $this->l10nResource->setValueList($this->valueList);
     }
 
+    public function testGetL10nResource()
+    {
+        $l10nManager = new L10nYamlManager('someDataFile');
+        $result = $l10nManager->getL10nResource($this->idResource, $this->idLocalization);
 
+        $this->assertEquals($this->l10nResource, $result);
+    }
+
+    public function testGetAllL10nResourceList()
+    {
+        $l10nManager = new L10nYamlManager('someDataFile');
+        $result = $l10nManager->getAllL10nResourceList();
+        $this->assertEquals(array($this->l10nResource), $result);
+    }
 
 }
