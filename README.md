@@ -16,7 +16,7 @@ Configuration
 -------------
 
     l10n:
-        default_localisation: 1 # The default IdLocalisation, used when no excplicit Localisation is asked
+        default_localization: 1 # The default IdLocalization, used when no excplicit Localization is asked
         default_locale: fr_FR # The default locale, to manage I10N values
         manager: l10n_bundle.manager.l10n_yaml # The service's name of the manager you want to use
         
