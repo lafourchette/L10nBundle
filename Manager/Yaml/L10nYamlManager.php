@@ -30,7 +30,7 @@ class L10nYamlManager implements L10nManagerInterface
     /**
      * @param string $dataFile
      */
-    public function  __construct($dataFile)
+    public function __construct($dataFile)
     {
         $this->dataFile = $dataFile;
     }
