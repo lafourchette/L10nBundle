@@ -21,7 +21,7 @@ class L10nMongoDbManager implements L10nManagerInterface
     /**
      * @var \MongoDB
      */
-    protected  $db;
+    protected $db;
 
 
     /**
