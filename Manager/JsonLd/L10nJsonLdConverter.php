@@ -37,7 +37,6 @@ class L10nJsonLdConverter implements L10nConverterInterface
                $quadList[] = new Quad($bNode, new IRI(self::NS . 'localization'), new IRI($l10nResource->getIdLocalization()));
                $valueList = $l10nResource->getValueList();
                foreach ($valueList as $locale => $value) {
-                   $litteral = $value;
                    if (!is_int($locale)) {
                        $value .= '@' . $locale;
                    }
