@@ -5,13 +5,19 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-            <parameter key="l10n_bundle.business.l10n_provider.class">L10nBundle\Business\L10nProvider</parameter>    
+            <parameter key="l10n_bundle.business.l10n_provider.class">L10nBundle\Business\L10nProvider</parameter>
+            <parameter key="l10n_bundle.business.l10n_exporter.class">L10nBundle\Business\L10nExporter</parameter>       
     </parameters>
     <services>
         <service id="l10n_bundle.business.l10n_provider" class="%l10n_bundle.business.l10n_provider.class%">
             <argument type="service" id="l10n_bundle.l10n_manager" />
             <argument>%default_localization%</argument>
             <argument>%default_locale%</argument>
+        </service>
+        <service id="l10n_bundle.business.l10n_exporter" class="%l10n_bundle.business.l10n_exporter.class%">
+            <argument type="service" id="l10n_bundle.l10n_manager" />
+            <argument type="service" id="l10n_bundle.manager.jsonld_converter" />
+            <argument>%l10n_export_dir%</argument>
         </service>
     </services>
      

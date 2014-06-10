@@ -18,6 +18,7 @@ Configuration
     l10n:
         default_localization: 1 # The default IdLocalization, used when no excplicit Localization is asked
         default_locale: fr_FR # The default locale, to manage I10N values
+        export_dir: path to the export directory
         manager: l10n_bundle.manager.l10n_yaml # The service's name of the manager you want to use
         
     # specific options for managers

@@ -18,6 +18,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('default_localization')->isRequired()->end()
                 ->scalarNode('default_locale')->isRequired()->end()
+                ->scalarNode('export_dir')->isRequired()->end()
                 ->scalarNode('manager')->isRequired()->end()
                 ->arrayNode('yaml')
                     ->children()
