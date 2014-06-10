@@ -23,6 +23,7 @@ class L10nExtension extends Extension
 
         $container->setParameter('default_localization', $config['default_localization']);
         $container->setParameter('default_locale', $config['default_locale']);
+        $container->setParameter('l10n_export_dir', $config['export_dir']);
 
 
         //YAML config

@@ -27,7 +27,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
         $this->l10nResult = array(
                 'id_resource' => $this->idResource,
                 'id_localization' => $this->idLocalization,
-                'values' => array(
+                'value_list' => array(
                         array('language' => 'fr-FR', 'value' => 'autre value fr'),
                         array('language' => 'en-GB', 'value' => 'other value en')
                 )

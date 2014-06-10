@@ -53,7 +53,7 @@ class L10nMongoDbManager implements L10nManagerInterface
 
         if (count($l10nResult)) {
             $valueList = array();
-            $valueListResult = $l10nResult['values'];
+            $valueListResult = $l10nResult['value_list'];
             foreach ($valueListResult as $value) {
                 if (isset($value['language'])) {
                     $valueList[$value['language']] = $value['value'];
@@ -83,7 +83,7 @@ class L10nMongoDbManager implements L10nManagerInterface
         if (count($l10nResultList)) {
             foreach ($l10nResultList as $l10nResult) {
                 $valueList = array();
-                $valueListResult = $l10nResult['values'];
+                $valueListResult = $l10nResult['value_list'];
                 foreach ($valueListResult as $value) {
                     if (isset($value['language'])) {
                         $valueList[$value['language']] = $value['value'];

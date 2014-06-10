@@ -1,0 +1,52 @@
+<?php
+
+namespace L10nBundle\Manager\MongoDb;
+
+use L10nBundle\Entity\L10nResource;
+use L10nBundle\Manager\L10nConverterInterface;
+use L10nBundle\Manager\JsonLd\L10nJsonLdConverter;
+
+/**
+ * @@TODO doc
+ * @author Cyril Otal
+ *
+ */
+class L10nJsonLdConverterTest extends \PHPUnit_Framework_TestCase
+{
+
+    public function testConvertL10nResourceList()
+    {
+        $l10nResourceList = array();
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalization('Montpellier');
+        $l10nResource->setIdResource('Adress');
+        $valueList = array();
+        $valueList['fr-FR'] = 'rue';
+        $valueList['en-GB'] = 'street';
+        $l10nResource->setValueList($valueList);
+        $l10nResourceList[] = $l10nResource;
+
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalization('Montpellier');
+        $l10nResource->setIdResource('tel');
+        $l10nResource->setValueList(array('06'));
+        $l10nResourceList[] = $l10nResource;
+
+        $expected = '{"@context":{"l10n":"'
+                . L10nJsonLdConverter::NS
+                . '"},"@graph":'
+                . '[{"@id":"_0","l10n:key":[{"@id":"Adress"}],'
+                . '"l10n:localization":[{"@id":"Montpellier"}],'
+                . '"l10n:value":["rue@fr-FR","street@en-GB"]},'
+                . '{"@id":"_1","l10n:key":[{"@id":"tel"}],'
+                . '"l10n:localization":[{"@id":"Montpellier"}],'
+                . '"l10n:value":["06"]}]}';
+
+        $l10nJsonLdConverter = new L10nJsonLdConverter();
+        $result = $l10nJsonLdConverter->convertL10nResourceList($l10nResourceList);
+        $this->assertEquals($expected, $result);
+    }
+
+
+}
+
