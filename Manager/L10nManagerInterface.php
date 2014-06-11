@@ -32,6 +32,7 @@ interface L10nManagerInterface
      * which valueList is a list of values.
      *      array('value') if not internationnalised,
      *      array('locale_code' => 'value', …) if internationnalised
+     * @return void
      */
      public function setL10nResource(L10nResource $l10nResource);
 }
