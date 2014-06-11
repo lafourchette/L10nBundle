@@ -36,3 +36,11 @@ Configuration
             database: test_db
         
     
+Usage
+-----
+
+Example in a controler
+
+    $l10n = $this->getContainer()->get('l10n_bundle.business.l10n_provider');
+    $l10n->getL10n('key', 'idLoc');
+
