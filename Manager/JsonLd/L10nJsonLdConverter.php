@@ -2,7 +2,6 @@
 
 namespace L10nBundle\Manager\JsonLd;
 
-use L10nBundle\Entity\L10nResource;
 use L10nBundle\Manager\L10nConverterInterface;
 use ML\JsonLD\JsonLD;
 use ML\IRI\IRI;
