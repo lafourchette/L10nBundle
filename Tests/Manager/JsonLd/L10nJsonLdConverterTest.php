@@ -44,7 +44,7 @@ class L10nJsonLdConverterTest extends \PHPUnit_Framework_TestCase
 
         // PHP 5.4+
         if (defined('JSON_PRETTY_PRINT')) {
-            $expected = json_encode(json_decode($expected, true), JSON_PRETTY_PRINT);
+            $expected = json_encode(json_decode($expected, true), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
 
         $l10nJsonLdConverter = new L10nJsonLdConverter();
