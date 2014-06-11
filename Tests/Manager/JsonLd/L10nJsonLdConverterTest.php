@@ -42,6 +42,11 @@ class L10nJsonLdConverterTest extends \PHPUnit_Framework_TestCase
                 . '"l10n:localization":[{"@id":"Montpellier"}],'
                 . '"l10n:value":["06"]}]}';
 
+        // PHP 5.4+
+        if (defined('JSON_PRETTY_PRINT')) {
+            $expected = json_encode(json_decode($expected, true), JSON_PRETTY_PRINT);
+        }
+
         $l10nJsonLdConverter = new L10nJsonLdConverter();
         $result = $l10nJsonLdConverter->convertL10nResourceList($l10nResourceList);
         $this->assertEquals($expected, $result);
