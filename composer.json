@@ -1,5 +1,5 @@
 {
-    "name": "l10n-bundle",
+    "name": "lafourchette/l10n-bundle",
     "description": "A bundle to manage localization",
     "type": "symfony-bundle",
     "keywords": ["localization", "L10N"],
