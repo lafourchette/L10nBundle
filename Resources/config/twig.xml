@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="l10n_bundle.twig.extension.l10n.class">L10nBundle\Twig\Extension\L10nExtension</parameter>
+    </parameters>
+    <services>
+        <service id="l10n_bundle.twig.extension.l10n" class="%l10n_bundle.twig.extension.l10n.class%">
+            <argument type="service" id="l10n_bundle.business.l10n_provider" />
+            <tag name="twig.extension" />
+        </service>
+    </services>
+
+</container>
