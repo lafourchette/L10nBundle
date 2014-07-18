@@ -19,7 +19,7 @@ class L10nProvider
 
     /**
      *
-     * @var mixed
+     * @var string
      */
     protected $defaultLocalization;
 
@@ -43,7 +43,7 @@ class L10nProvider
 
     /**
      *
-     * @return mixed
+     * @return string
      */
     public function getDefaultLocalization()
     {
@@ -52,7 +52,7 @@ class L10nProvider
 
     /**
      *
-     * @param mixed $defaultLocalization
+     * @param string $defaultLocalization
      * @return L10nProvider
      */
     public function setDefaultLocalization($defaultLocalization)
@@ -99,19 +99,19 @@ class L10nProvider
         }
         $resource = $this->l10nManager->getL10nResource($idResource, $idLocalization);
         if (!$resource) {
-            throw new ResourceNotFoundException(sprintf('Resource not found for idResource %s and idLocalization %s', $idResource, $idLocalization));
+            throw new ResourceNotFoundException(
+                sprintf('Resource not found for idResource %s and idLocalization %s', $idResource, $idLocalization)
+            );
         }
         $valueList = $resource->getValueList();
 
-        $value ='';
+        $value = '';
         if (count($valueList) === 1) {
             $value = reset($valueList);
-        } else {
-            if (isset($valueList[$locale])) {
+        } elseif (isset($valueList[$locale])) {
                 $value = $valueList[$locale];
-            } elseif (isset($valueList[$this->defaultLocale])) {
-                $value = $valueList[$this->defaultLocale];
-            }
+        } elseif (isset($valueList[$this->defaultLocale])) {
+            $value = $valueList[$this->defaultLocale];
         }
 
         return $value;

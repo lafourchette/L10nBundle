@@ -20,6 +20,7 @@ class L10nExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('manager.xml');
         $loader->load('business.xml');
+        $loader->load('twig.xml');
 
         $container->setParameter('default_localization', $config['default_localization']);
         $container->setParameter('default_locale', $config['default_locale']);
