@@ -13,12 +13,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class L10nYamlManager implements L10nManagerInterface
 {
-    const URI_PREFIX = '#';
-    const NS = 'l10n:';
-    const ATTR_ID = '@id';
-    const ATTR_LANGUAGE = '@language';
-    const ATTR_VALUE = '@value';
-    const ROOT = '@graph';
+    const ROOT = 'l10n';
 
 
     /**
@@ -44,29 +39,16 @@ class L10nYamlManager implements L10nManagerInterface
     public function getL10nResource($idResource, $idLocalization)
     {
         $resourceList = $this->getYamlResourceList();
-
         $values = array();
 
         $l10nResource = null;
 
-        if (!empty($resourceList)) {
-            foreach($resourceList as $resource) {
-                if ($resource[self::NS . 'key'][self::ATTR_ID] == self::URI_PREFIX . $idResource
-                        && $resource[self::NS . 'localization'][self::ATTR_ID] == self::URI_PREFIX . $idLocalization
-                    ) {
-                    $valueList = $resource[self::NS . 'value'];
-                    if (!is_array($valueList)) {
-                        break;
-                    }
-                    foreach ($valueList as $value) {
-                        if (isset($value[self::ATTR_LANGUAGE])) {
-                            $values[$value[self::ATTR_LANGUAGE]] = $value[self::ATTR_VALUE];
-                        } else {
-                            $values[] = $value[self::ATTR_VALUE];
-                        }
-                    }
-                    break;
-                }
+        if (!empty($resourceList) && isset($resourceList[$idResource]) && isset($resourceList[$idResource][$idLocalization])) {
+            $valueList = $resourceList[$idResource][$idLocalization];
+            if (!is_array($valueList)) {
+                $values[] = $valueList;
+            } else {
+                $values = $valueList;
             }
         }
 
@@ -87,30 +69,23 @@ class L10nYamlManager implements L10nManagerInterface
     public function getAllL10nResourceList()
     {
         $resourceList = $this->getYamlResourceList();
+
         $l10nResourceList = array();
 
         if (!empty($resourceList)) {
-            foreach($resourceList as $resource) {
-                $values = array();
-                $idResource = preg_replace('/^' . self::URI_PREFIX . '/' , '', $resource[self::NS . 'key'][self::ATTR_ID]);
-                $idLocalization = preg_replace('/^' . self::URI_PREFIX . '/' , '', $resource[self::NS . 'localization'][self::ATTR_ID]);
+            foreach($resourceList as $idResource => $idLocalizationList) {
+                foreach ($idLocalizationList as $idLocalization => $valueList) {
 
-                $valueList = $resource[self::NS . 'value'];
-                if (!is_array($valueList)) {
-                    break;
-                }
-                foreach ($valueList as $value) {
-                    if (isset($value[self::ATTR_LANGUAGE])) {
-                        $values[$value[self::ATTR_LANGUAGE]] = $value[self::ATTR_VALUE];
-                    } else {
-                        $values[] = $value[self::ATTR_VALUE];
+                    if (!is_array($valueList)) {
+                        $valueList = array($valueList);
                     }
+
+                    $l10nResource = new L10nResource();
+                    $l10nResource->setIdLocalization($idLocalization);
+                    $l10nResource->setIdResource($idResource);
+                    $l10nResource->setValueList($valueList);
+                    $l10nResourceList[] = $l10nResource;
                 }
-                $l10nResource = new L10nResource();
-                $l10nResource->setIdLocalization($idLocalization);
-                $l10nResource->setIdResource($idResource);
-                $l10nResource->setValueList($values);
-                $l10nResourceList[] = $l10nResource;
             }
         }
         return $l10nResourceList;
@@ -134,13 +109,21 @@ class L10nYamlManager implements L10nManagerInterface
      */
     protected function getYamlResourceList()
     {
-        $data = Yaml::parse(__DIR__ . $this->dataFile);
+        $parse = Yaml::parse($this->dataFile);
 
-        if (!isset($data[self::ROOT])) {
+        $data = array();
+
+        if (!isset($parse[self::ROOT])) {
             throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
         }
 
-        return $data[self::ROOT];
+        foreach ($parse[self::ROOT] as $idResource => $idLocalizationList) {
+            $data[$idResource] = array();
+            foreach ($idLocalizationList as $idLocalization => $valueList) {
+                $data[$idResource][$idLocalization] = $valueList;
+            }
+        }
+        return $data;
     }
 
 }

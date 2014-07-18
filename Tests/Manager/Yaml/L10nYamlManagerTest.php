@@ -9,34 +9,18 @@ class Yaml
     {
         // return static data, for tests
         return array(
-                '@graph' => array
+            'l10n' => array(
+                'key' => array
+                (
+                    'idLoc'  =>  array
                     (
-                        array
-                        (
-                                'l10n:key' => array
-                                (
-                                        '@id' => '#key'
-                                ),
-                                'l10n:localization' => array
-                                (
-                                        '@id' => '#idLoc'
-                                ),
-                                'l10n:value' => array
-                                (
-                                        array
-                                        (
-                                                '@language' => 'fr-FR',
-                                                '@value' => 'autre value fr'
-                                        ),
-                                        array
-                                        (
-                                                '@language' => 'en-GB',
-                                                '@value' => 'other value en'
-                                        )
-                                )
-                        )
+                     'fr-FR' => 'autre value fr',
+                     'en-GB' => 'other value en'
+                    )
                 )
-            );
+
+            )
+        );
     }
 }
 
@@ -99,22 +83,16 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->l10nManager = $this->getMock('L10nBundle\Manager\Yaml\L10nYamlManager', array('getYamlResourceList'), array('someDataFile'), 'L10nYamlManager', false);
 
-
-        $this->yamlResourceList = array(
-            array (
-                'l10n:key' => array('@id' => '#key'),
-                'l10n:localization' => array('@id' => '#idLoc'),
-                'l10n:value' => array(
-                    array(
-                        '@language' => 'fr-FR',
-                        '@value' => 'autre value fr'
-                    ),
-                    array(
-                            '@language' => 'en-GB',
-                            '@value' => 'other value en'
-                    ),
+        $this->yamlResourceList =
+            array(
+                'key' => array
+                (
+                    'idLoc'  =>  array
+                        (
+                         'fr-FR' => 'autre value fr',
+                         'en-GB' => 'other value en'
+                        )
                 )
-            )
         );
 
         $this->l10nManager->expects($this->any())
