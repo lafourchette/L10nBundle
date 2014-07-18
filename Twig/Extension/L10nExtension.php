@@ -27,7 +27,7 @@ class L10nExtension extends TwigExtension
     public function getFilters()
     {
         return array(
-            "l10n" => new \Twig_Filter_Method($this, "getL10n")
+            'l10n' => new \Twig_Filter_Method($this, 'getL10n')
         );
     }
 
@@ -45,7 +45,7 @@ class L10nExtension extends TwigExtension
      */
     public function getL10n($key)
     {
-        return $this->languageProvider->getL10n($key);
+        return $this->l10nProvider->getL10n($key);
     }
 }
 
