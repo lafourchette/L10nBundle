@@ -27,7 +27,7 @@ class L10nExtension extends TwigExtension
     public function getFilters()
     {
         return array(
-            'l10n' => new \Twig_Filter_Method($this, 'getL10n')
+            'l10n' => new \Twig_SimpleFilter('l10n', array($this, 'getL10n'))
         );
     }
 
