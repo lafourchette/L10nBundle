@@ -15,7 +15,6 @@ class L10nYamlManager implements L10nManagerInterface
 {
     const ROOT = 'l10n';
 
-
     /**
      * Catalogue file
      * @var array
@@ -36,31 +35,22 @@ class L10nYamlManager implements L10nManagerInterface
      * @return array
      * @throws \InvalidArgumentException
      */
-    private function buildCatalogue($filePath)
+    protected function buildCatalogue($filePath)
     {
         $parse = Yaml::parse($filePath);
-
-        $data = array();
 
         if (!isset($parse[self::ROOT])) {
             throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
         }
 
-        foreach ($parse[self::ROOT] as $idResource => $idLocalizationList) {
-            $data[$idResource] = array();
-            foreach ($idLocalizationList as $idLocalization => $valueList) {
-                $data[$idResource][$idLocalization] = $valueList;
-            }
-        }
-
-        return $data;
+        return $parse[self::ROOT];
     }
 
    /**
     * Return a L10nResource
     * @param $idResource
     * @param $idLocalization
-    * @return L10nResource $l10nResource
+    * @return L10nResource $l10nResource | null
     */
     public function getL10nResource($idResource, $idLocalization)
     {
@@ -77,10 +67,7 @@ class L10nYamlManager implements L10nManagerInterface
             }
 
             if (!empty($values)) {
-                $l10nResource = new L10nResource();
-                $l10nResource->setIdLocalization($idLocalization);
-                $l10nResource->setIdResource($idResource);
-                $l10nResource->setValueList($values);
+                $l10nResource = $this->hydrate($idLocalization, $idResource, $values);
             }
         }
 
@@ -103,11 +90,7 @@ class L10nYamlManager implements L10nManagerInterface
                         $valueList = array($valueList);
                     }
 
-                    $l10nResource = new L10nResource();
-                    $l10nResource->setIdLocalization($idLocalization);
-                    $l10nResource->setIdResource($idResource);
-                    $l10nResource->setValueList($valueList);
-                    $l10nResourceList[] = $l10nResource;
+                    $l10nResourceList[] = $this->hydrate($idLocalization, $idResource, $valueList);
                 }
             }
         }
@@ -123,5 +106,29 @@ class L10nYamlManager implements L10nManagerInterface
     public function setL10nResource(L10nResource $l10nResource)
     {
         throw new \Exception('Can\'t save data in a YAML source');
+    }
+
+    /**
+     * Build a L10nResource
+     * @param $idLocalization
+     * @param $idResource
+     * @param $valueList
+     * @return L10nResource
+     */
+    protected function hydrate($idLocalization, $idResource, $valueList)
+    {
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalization($idLocalization);
+        $l10nResource->setIdResource($idResource);
+        $l10nResource->setValueList($valueList);
+        return $l10nResource;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCatalogue()
+    {
+        return $this->catalogue;
     }
 }

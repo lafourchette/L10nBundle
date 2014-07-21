@@ -67,8 +67,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->l10nResource = new L10nResource();
-        $this->valueList = array
-        (
+        $this->valueList = array (
                 'fr-FR' => 'autre value fr',
                 'en-GB' => 'other value en'
         );
@@ -90,5 +89,19 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->l10nManager->getAllL10nResourceList();
         $this->assertEquals(array($this->l10nResource), $result);
+    }
+
+    public function test__construct()
+    {
+        $this->assertEquals(array(
+            'key' => array
+            (
+                'idLoc'  =>  array
+                (
+                    'fr-FR' => 'autre value fr',
+                    'en-GB' => 'other value en'
+                )
+            )
+        ), $this->l10nManager->getCatalogue());
     }
 }
