@@ -122,7 +122,7 @@ class L10nMongoDbManager implements L10nManagerInterface
                             'value' => $value
                         );
             } else {
-                $valueMongoList[] = $value;
+                $valueMongoList[] = array($value);
             }
         }
         $l10nCollection = $this->db->L10nResource;
