@@ -24,8 +24,6 @@ class L10nExtension extends Extension
 
         $container->setParameter('localization_fallback', $config['localization_fallback']);
         $container->setParameter('locale_fallback', $config['locale_fallback']);
-        $container->setParameter('l10n_export_dir', $config['export_dir']);
-
 
         //YAML config
         $container->setParameter('yaml_data_file', count($config['yaml']) ? $config['yaml']['data_file'] : '');
