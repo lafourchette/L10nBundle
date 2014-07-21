@@ -31,7 +31,7 @@ class L10nProvider
 
     /**
      * @param L10nManagerInterface $l10nManager
-     * @param mixed $defaultLocalization
+     * @param string $defaultLocalization
      * @param string $defaultLocale
      */
     public function __construct(L10nManagerInterface $l10nManager, $defaultLocalization, $defaultLocale)
