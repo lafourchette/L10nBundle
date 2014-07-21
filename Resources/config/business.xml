@@ -11,13 +11,12 @@
     <services>
         <service id="l10n_bundle.business.l10n_provider" class="%l10n_bundle.business.l10n_provider.class%">
             <argument type="service" id="l10n_bundle.l10n_manager" />
-            <argument>%default_localization%</argument>
-            <argument>%default_locale%</argument>
+            <argument>%localization_fallback%</argument>
+            <argument>%locale_fallback%</argument>
         </service>
         <service id="l10n_bundle.business.l10n_exporter" class="%l10n_bundle.business.l10n_exporter.class%">
             <argument type="service" id="l10n_bundle.l10n_manager" />
             <argument type="service" id="l10n_bundle.manager.jsonld_converter" />
-            <argument>%l10n_export_dir%</argument>
         </service>
     </services>
      

@@ -21,6 +21,10 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!extension_loaded('mongo')) {
+            $this->markTestSkipped('Mongo extension is not loaded');
+        }
+
         $this->idResource = 'key';
         $this->idLocalization = 'idLoc';
 

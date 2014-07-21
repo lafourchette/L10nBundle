@@ -22,10 +22,8 @@ class L10nExtension extends Extension
         $loader->load('business.xml');
         $loader->load('twig.xml');
 
-        $container->setParameter('default_localization', $config['default_localization']);
-        $container->setParameter('default_locale', $config['default_locale']);
-        $container->setParameter('l10n_export_dir', $config['export_dir']);
-
+        $container->setParameter('localization_fallback', $config['localization_fallback']);
+        $container->setParameter('locale_fallback', $config['locale_fallback']);
 
         //YAML config
         $container->setParameter('yaml_data_file', count($config['yaml']) ? $config['yaml']['data_file'] : '');
