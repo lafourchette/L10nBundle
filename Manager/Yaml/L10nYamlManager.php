@@ -76,10 +76,12 @@ class L10nYamlManager implements L10nManagerInterface
                 $values = $valueList;
             }
 
-            $l10nResource = new L10nResource();
-            $l10nResource->setIdLocalization($idLocalization);
-            $l10nResource->setIdResource($idResource);
-            $l10nResource->setValueList($values);
+            if (!empty($values)) {
+                $l10nResource = new L10nResource();
+                $l10nResource->setIdLocalization($idLocalization);
+                $l10nResource->setIdResource($idResource);
+                $l10nResource->setValueList($values);
+            }
         }
 
         return $l10nResource;
