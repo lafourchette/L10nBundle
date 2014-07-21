@@ -16,8 +16,8 @@ Configuration
 -------------
 
     l10n:
-        localization_fallback: fr # The default IdLocalization, used when no excplicit Localization is asked
-        locale_fallback: fr_FR # The default locale, to manage I10N values
+        localization_fallback: en # Fallback localization, used when no explicit Localization is asked or localization not found. Value may be string or integer
+        locale_fallback: en_US # Fallback locale, to manage I10N values
         manager: l10n_bundle.manager.l10n_yaml # The service's name of the manager you want to use
         
     # specific options for managers

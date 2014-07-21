@@ -17,17 +17,43 @@ class L10nYamlManager implements L10nManagerInterface
 
 
     /**
-     * Path to YAML file
-     * @var string
+     * Catalogue file
+     * @var array
      */
-    protected $dataFile;
+    private $catalogue;
 
     /**
-     * @param string $dataFile
+     * @param string $filePath
      */
-    public function __construct($dataFile)
+    public function __construct($filePath)
     {
-        $this->dataFile = $dataFile;
+        $this->catalogue = $this->buildCatalogue($filePath);
+    }
+
+    /**
+     * Parse the YAML file and return an array of data
+     * @param $filePath
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    private function buildCatalogue($filePath)
+    {
+        $parse = Yaml::parse($filePath);
+
+        $data = array();
+
+        if (!isset($parse[self::ROOT])) {
+            throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
+        }
+
+        foreach ($parse[self::ROOT] as $idResource => $idLocalizationList) {
+            $data[$idResource] = array();
+            foreach ($idLocalizationList as $idLocalization => $valueList) {
+                $data[$idResource][$idLocalization] = $valueList;
+            }
+        }
+
+        return $data;
     }
 
    /**
@@ -38,21 +64,18 @@ class L10nYamlManager implements L10nManagerInterface
     */
     public function getL10nResource($idResource, $idLocalization)
     {
-        $resourceList = $this->getYamlResourceList();
         $values = array();
 
         $l10nResource = null;
 
-        if (!empty($resourceList) && isset($resourceList[$idResource]) && isset($resourceList[$idResource][$idLocalization])) {
-            $valueList = $resourceList[$idResource][$idLocalization];
+        if (isset($this->catalogue[$idResource][$idLocalization])) {
+            $valueList = $this->catalogue[$idResource][$idLocalization];
             if (!is_array($valueList)) {
                 $values[] = $valueList;
             } else {
                 $values = $valueList;
             }
-        }
 
-        if (!empty($values)) {
             $l10nResource = new L10nResource();
             $l10nResource->setIdLocalization($idLocalization);
             $l10nResource->setIdResource($idResource);
@@ -68,12 +91,10 @@ class L10nYamlManager implements L10nManagerInterface
      */
     public function getAllL10nResourceList()
     {
-        $resourceList = $this->getYamlResourceList();
-
         $l10nResourceList = array();
 
-        if (!empty($resourceList)) {
-            foreach($resourceList as $idResource => $idLocalizationList) {
+        if (!empty($this->catalogue)) {
+            foreach ($this->catalogue as $idResource => $idLocalizationList) {
                 foreach ($idLocalizationList as $idLocalization => $valueList) {
 
                     if (!is_array($valueList)) {
@@ -101,29 +122,4 @@ class L10nYamlManager implements L10nManagerInterface
     {
         throw new \Exception('Can\'t save data in a YAML source');
     }
-
-    /**
-     * Parse the YAML file and return an array of data
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    protected function getYamlResourceList()
-    {
-        $parse = Yaml::parse($this->dataFile);
-
-        $data = array();
-
-        if (!isset($parse[self::ROOT])) {
-            throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
-        }
-
-        foreach ($parse[self::ROOT] as $idResource => $idLocalizationList) {
-            $data[$idResource] = array();
-            foreach ($idLocalizationList as $idLocalization => $valueList) {
-                $data[$idResource][$idLocalization] = $valueList;
-            }
-        }
-        return $data;
-    }
-
 }
