@@ -32,7 +32,7 @@ class L10nYamlManager implements L10nManagerInterface
 
     /**
      * Parse the YAML file and return an array of data
-     * @param $filePath
+     * @param string $filePath
      * @return array
      * @throws \InvalidArgumentException
      */

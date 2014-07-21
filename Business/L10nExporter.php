@@ -35,7 +35,7 @@ class L10nExporter
 
     /**
      * Export L10nResources in the given filename
-     * @param string $fileName name of the export file
+     * @param string $filePath name of the export file
      */
     public function exportAllL10nResourceList($filePath = '')
     {
