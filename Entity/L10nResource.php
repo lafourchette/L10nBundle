@@ -83,7 +83,8 @@ class L10nResource
     }
 
     /**
-     * @param $locale
+     * @param string $locale
+     * @param string $fallbackLocale
      * @return null|string
      */
     public function getValue($locale, $fallbackLocale)
