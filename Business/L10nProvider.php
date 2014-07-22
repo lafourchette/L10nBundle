@@ -144,6 +144,18 @@ class L10nProvider
             $locale = $this->defaultLocale;
         }
 
+        $resource = $this->getResourceOrFallbackResource($idResource, $idLocalization);
+        return $resource->getValue($locale, $this->fallbackLocale);
+    }
+
+    /**
+     * @param $idResource
+     * @param $idLocalization
+     * @return \L10nBundle\Entity\L10nResource
+     * @throws \L10nBundle\Exception\ResourceNotFoundException
+     */
+    protected function getResourceOrFallbackResource($idResource, $idLocalization)
+    {
         $resource = $this->l10nManager->getL10nResource($idResource, $idLocalization);
 
         if (!$resource) {
@@ -155,6 +167,6 @@ class L10nProvider
             }
         }
 
-        return $resource->getValue($locale, $this->fallbackLocale);
+        return $resource;
     }
 }
