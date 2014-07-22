@@ -8,14 +8,16 @@ namespace L10nBundle\Twig\Extension;
 
 use L10nBundle\Business\L10nProvider;
 
-class L10nExtension extends TwigExtension
+class L10nExtension extends \Twig_Extension
 {
     /**
      * @var \L10nBundle\Business\L10nProvider
      */
     private $l10nProvider;
 
-
+    /**
+     * @param L10nProvider $l10nProvider
+     */
     public function __construct(L10nProvider $l10nProvider)
     {
         $this->l10nProvider = $l10nProvider;
