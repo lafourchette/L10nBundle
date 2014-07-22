@@ -39,6 +39,10 @@ class L10nYamlManager implements L10nManagerInterface
     {
         $parse = Yaml::parse($filePath);
 
+        if (!is_array($parse)) {
+            throw new \InvalidArgumentException('file "' . $filePath . '" doesn\'t not exist');
+        }
+
         if (!isset($parse[self::ROOT])) {
             throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
         }

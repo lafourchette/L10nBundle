@@ -12,17 +12,6 @@
     </parameters>
         
     <services>
-        <service id="l10n_bundle.manager.l10n_yaml" class="%l10n_bundle.manager.l10n_yaml.class%">
-            <argument>%yaml_data_file%</argument>
-        </service>
-        <service id="l10n_bundle.manager.l10n_mongodb" class="%l10n_bundle.manager.l10n_mongodb.class%">
-            <argument>%mongodb_host%</argument>
-            <argument>%mongodb_port%</argument>
-            <argument>%mongodb_username%</argument>
-            <argument>%mongodb_password%</argument>
-            <argument>%mongodb_database%</argument>
-        </service>
-        
         <service id="l10n_bundle.manager.jsonld_converter" class="%l10n_bundle.manager.jsonld_converter.class%" />
     </services>
 </container>

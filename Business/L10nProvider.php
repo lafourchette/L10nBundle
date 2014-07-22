@@ -30,15 +30,25 @@ class L10nProvider
     protected $defaultLocale;
 
     /**
-     * @param L10nManagerInterface $l10nManager
-     * @param string $defaultLocalization
-     * @param string $defaultLocale
+     * @var string
      */
-    public function __construct(L10nManagerInterface $l10nManager, $defaultLocalization, $defaultLocale)
+    protected $fallbackLocale;
+
+    /**
+     * @var string
+     */
+    protected $fallbackLocalization;
+
+    /**
+     * @param L10nManagerInterface $l10nManager
+     * @param $fallbackLocalization
+     * @param $fallbackLocale
+     */
+    public function __construct(L10nManagerInterface $l10nManager, $fallbackLocalization, $fallbackLocale)
     {
         $this->l10nManager = $l10nManager;
-        $this->defaultLocalization = $defaultLocalization;
-        $this->defaultLocale = $defaultLocale;
+        $this->fallbackLocalization = $fallbackLocalization;
+        $this->fallbackLocale = $fallbackLocale;
     }
 
     /**
@@ -82,6 +92,42 @@ class L10nProvider
     }
 
     /**
+     * @param $fallbackLocale
+     * @return $this
+     */
+    public function setFallbackLocale($fallbackLocale)
+    {
+        $this->fallbackLocale = $fallbackLocale;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFallbackLocale()
+    {
+        return $this->fallbackLocale;
+    }
+
+    /**
+     * @param $fallbackLocale
+     * @return $this
+     */
+    public function setFallbackLocalization($fallbackLocalization)
+    {
+        $this->fallbackLocalization = $fallbackLocalization;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFallbackLocalization()
+    {
+        return $this->fallbackLocalization;
+    }
+
+    /**
      * Return a localised value
      * @param mixed $idResource
      * @param mixed $idLocalization
@@ -91,30 +137,24 @@ class L10nProvider
      */
     public function getL10n($idResource, $idLocalization = null, $locale = null)
     {
-        if (!$idLocalization) {
+        if (is_null($idLocalization)) {
             $idLocalization = $this->defaultLocalization;
         }
-        if (!$locale) {
+        if (is_null($locale)) {
             $locale = $this->defaultLocale;
         }
+
         $resource = $this->l10nManager->getL10nResource($idResource, $idLocalization);
+
         if (!$resource) {
-            throw new ResourceNotFoundException(
-                sprintf('Resource not found for idResource %s and idLocalization %s', $idResource, $idLocalization)
-            );
-        }
-        $valueList = $resource->getValueList();
-
-        $value = '';
-        if (count($valueList) === 1) {
-            $value = reset($valueList);
-        } elseif (isset($valueList[$locale])) {
-                $value = $valueList[$locale];
-        } elseif (isset($valueList[$this->defaultLocale])) {
-            $value = $valueList[$this->defaultLocale];
+            $resource = $this->l10nManager->getL10nResource($idResource, $this->fallbackLocalization);
+            if (!$resource) {
+                throw new ResourceNotFoundException(
+                    sprintf('Resource not found for idResource %s and idLocalization %s', $idResource, $idLocalization)
+                );
+            }
         }
 
-        return $value;
+        return $resource->getValue($locale, $this->fallbackLocale);
     }
-
 }

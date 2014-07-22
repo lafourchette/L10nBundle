@@ -13,83 +13,164 @@ use L10nBundle\Business\L10nProvider;
  */
 class L10nProviderTest extends \PHPUnit_Framework_TestCase
 {
+    protected $l10nManager;
 
-
-
-    /**
-     *
-     * @dataProvider provideData
-     */
-    public function testGetL10n($idResource, $idLocalization, $idLocalizationAskedToManager, $locale, $defaultLocalization, $defaultLocale, $l10nResource, $expected)
+    public function setUp()
     {
+        $this->l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array(
+            'getL10nResource',
+            'setL10nResource',
+            'getAllL10nResourceList'
+        ), array(), '', false);
+    }
 
-        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource', 'getAllL10nResourceList'), array(), '', false);
-        $l10nManager
+    public function testGetL10nWithAllArgs()
+    {
+        $key = 'cgu';
+        $localization = 'fr';
+        $locale = 'fr_FR';
+        $expected = 'my_value';
+
+
+        $l10nResource = new L10nResource();
+        $l10nResource->setValueList(array(
+            $locale => $expected
+        ));
+
+
+        $this->l10nManager
             ->expects($this->once())
             ->method('getL10nResource')
-            ->with($idResource, $idLocalizationAskedToManager)
+            ->with($key, $localization)
             ->will($this->returnValue($l10nResource))
         ;
 
-        $l10nProvider = new L10nProvider($l10nManager, $defaultLocalization, $defaultLocale);
-        $value = $l10nProvider->getL10n($idResource, $idLocalization, $locale);
-        $this->assertEquals($expected, $value);
+        $l10nProvider = new L10nProvider($this->l10nManager, 'xx', 'xx_XX');
 
+        $value = $l10nProvider->getL10n($key, $localization, $locale);
+
+        $this->assertEquals($expected, $value);
     }
 
-    public function provideData()
+    public function testGetL10nWithDefaultLocaleAndDefaultLocalization()
     {
-        $return = array();
+        $key = 'cgu';
+        $localization = 'fr';
+        $locale = 'fr_FR';
+        $expected = 'my_value';
 
-        $idResource = 'key';
-        $idLocalization = 'France';
-        $defaultLocalization = 'Japan';
-        $defaultLocale = 'fr-BE';
-        $locale = 'sl-SI';
 
         $l10nResource = new L10nResource();
-        $valueList = array();
-        $value = 'plop';
-        $valueList[$locale] = $value;
-        $l10nResource->setValueList($valueList);
+        $l10nResource->setValueList(array(
+            $locale => $expected
+        ));
 
-        // I18N Value
-        $return[] = array($idResource, $idLocalization, $idLocalization, $locale, $defaultLocalization, $defaultLocale, $l10nResource, $value);
 
-        $l10nResource->setValueList(array($value));
-
-        // non I18N value
-        $return[] = array($idResource, $idLocalization, $idLocalization, $locale, $defaultLocalization, $defaultLocale, $l10nResource, $value);
-
-        $l10nResource->setValueList(array($defaultLocale => $value));
-
-        // test fallbacks
-        $return[] = array($idResource, null, $defaultLocalization, null, $defaultLocalization, $defaultLocale, $l10nResource, $value);
-
-        return $return;
-    }
-
-    /**
-     * @expectedException \L10nBundle\Exception\ResourceNotFoundException
-     */
-    public function testGetL10nWithResourceNotFoundException()
-    {
-        $idResource = 'key';
-        $idLocalization = 'France';
-        $defaultLocalization = 'Japan';
-        $defaultLocale = 'fr-BE';
-
-        $l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array('getL10nResource', 'setL10nResource', 'getAllL10nResourceList'), array(), '', false);
-        $l10nManager
+        $this->l10nManager
             ->expects($this->once())
             ->method('getL10nResource')
-            ->with($idResource, $idLocalization)
+            ->with($key, $localization)
+            ->will($this->returnValue($l10nResource))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, 'xx', 'xx_XX');
+        $l10nProvider->setDefaultLocale($locale);
+        $l10nProvider->setDefaultLocalization($localization);
+
+        $value = $l10nProvider->getL10n($key);
+
+        $this->assertEquals($expected, $value);
+    }
+
+    public function testGetL10nWithFallbacks()
+    {
+        $key = 'cgu';
+        $localization = 'fr';
+        $localizationFallback = 'en';
+        $locale = 'fr_FR';
+        $localeFallback = 'en_GB';
+        $expected = 'my_value';
+
+
+        $l10nResource = new L10nResource();
+        $l10nResource->setValueList(array(
+            $localeFallback => $expected
+        ));
+
+
+        $this->l10nManager
+            ->expects($this->at(0))
+            ->method('getL10nResource')
+            ->with($key, $localization)
             ->will($this->returnValue(null))
         ;
 
-        $l10nProvider = new L10nProvider($l10nManager, $defaultLocalization, $defaultLocale);
-        $l10nProvider->getL10n($idResource, $idLocalization);
+        $this->l10nManager
+            ->expects($this->at(1))
+            ->method('getL10nResource')
+            ->with($key, $localizationFallback)
+            ->will($this->returnValue($l10nResource))
+        ;
 
+        $l10nProvider = new L10nProvider($this->l10nManager, $localizationFallback, $localeFallback);
+
+        $value = $l10nProvider->getL10n($key, $localization, $locale);
+
+        $this->assertEquals($expected, $value);
     }
 
+
+    public function testGetL10nWithExistingResourceWithoutTranslationFallbackWill()
+    {
+        $key = 'cgu';
+        $localization = 'fr';
+        $locale = 'fr_FR';
+
+        $l10nResource = new L10nResource();
+        $l10nResource->setValueList(array(
+            'not_FOUND' => 'value'
+        ));
+
+
+        $this->l10nManager
+            ->expects($this->once())
+            ->method('getL10nResource')
+            ->with($key, $localization)
+            ->will($this->returnValue($l10nResource))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, 'en', 'en_GB');
+
+        $value = $l10nProvider->getL10n($key, $localization, $locale);
+
+        $this->assertNull($value);
+    }
+
+    public function testGetL10nWithKeyNotFoundThrowsExceptionNotFound()
+    {
+        $key = 'cgu';
+        $localization = 'fr';
+        $localizationFallback = 'en';
+        $locale = 'fr_FR';
+        $localeFallback = 'en_GB';
+
+        $this->l10nManager
+            ->expects($this->at(0))
+            ->method('getL10nResource')
+            ->with($key, $localization)
+            ->will($this->returnValue(null))
+        ;
+
+        $this->l10nManager
+            ->expects($this->at(1))
+            ->method('getL10nResource')
+            ->with($key, $localizationFallback)
+            ->will($this->returnValue(null))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, $localizationFallback, $localeFallback);
+
+        $this->setExpectedException('\L10nBundle\Exception\ResourceNotFoundException');
+        $l10nProvider->getL10n($key, $localization, $locale);
+    }
 }
