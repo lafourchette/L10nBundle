@@ -50,4 +50,3 @@ class L10nExtension extends \Twig_Extension
         return $this->l10nProvider->getL10n($key);
     }
 }
-

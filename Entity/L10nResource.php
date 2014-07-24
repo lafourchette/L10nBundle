@@ -22,9 +22,6 @@ class L10nResource
      */
     protected $valueList;
 
-
-
-
     /**
      *
      * @return mixed
@@ -83,5 +80,24 @@ class L10nResource
     {
         $this->valueList = $valueList;
         return $this;
+    }
+
+    /**
+     * @param string $locale
+     * @param string $fallbackLocale
+     * @return null|string
+     */
+    public function getValue($locale, $fallbackLocale)
+    {
+        if (isset($this->valueList[0])) {
+            $return = $this->valueList[0];
+        } elseif (isset($this->valueList[$locale])) {
+            $return = $this->valueList[$locale];
+        } elseif (isset($this->valueList[$fallbackLocale])) {
+            $return = $this->valueList[$fallbackLocale];
+        } else {
+            $return = $this->getIdResource();
+        }
+        return $return;
     }
 }
