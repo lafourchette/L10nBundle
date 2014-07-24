@@ -44,8 +44,6 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
-
     /**
      * @dataProvider getClass
      */
@@ -74,13 +72,16 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                 $type = $this->guessParamType($reflexionClass->getMethod($setter));
                 if (isset($this->valueList[$type])) {
                     $value = $this->valueList[$type];
-                }
-                $instance->$setter($value[0]);
-                $this->assertEquals($property->getValue($instance), $value[0]);
 
-                if ($reflexionClass->hasMethod($getter)) {
-                    $property->setValue($instance, $value[1]);
-                    $this->assertEquals($instance->$getter(), $value[1]);
+                    $instance->$setter($value[0]);
+                    // test setter
+                    $this->assertEquals($property->getValue($instance), $value[0]);
+
+                    if ($reflexionClass->hasMethod($getter)) {
+                        $property->setValue($instance, $value[1]);
+                        // test getter
+                        $this->assertEquals($instance->$getter(), $value[1]);
+                    }
                 }
             }
         }
