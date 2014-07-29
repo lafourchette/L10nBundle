@@ -130,7 +130,7 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $l10nResource->setValueList(array(
             'not-FOUND' => 'value'
         ));
-
+        $l10nResource->setIdResource($key);
 
         $this->l10nManager
             ->expects($this->once())
@@ -143,7 +143,7 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 
         $value = $l10nProvider->getL10n($key, $localization, $locale);
 
-        $this->assertNull($value);
+        $this->assertEquals($value, $key);
     }
 
     public function testGetL10nWithKeyNotFoundThrowsExceptionNotFound()
