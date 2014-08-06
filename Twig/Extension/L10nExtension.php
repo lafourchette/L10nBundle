@@ -16,6 +16,11 @@ class L10nExtension extends \Twig_Extension
     private $l10nProvider;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * @param L10nProvider $l10nProvider
      */
     public function __construct(L10nProvider $l10nProvider)
@@ -29,7 +34,9 @@ class L10nExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'l10n' => new \Twig_SimpleFilter('l10n', array($this, 'getL10n'))
+            'l10n' => new \Twig_SimpleFilter('l10n', array($this, 'getL10n')),
+            'l10nCurrency' => new \Twig_SimpleFilter('l10nCurrency', array($this, 'getL10nCurrency')),
+            'l10nNumber' => new \Twig_SimpleFilter('l10nNumber', array($this, 'getL10nNumber'))
         );
     }
 
@@ -41,6 +48,13 @@ class L10nExtension extends \Twig_Extension
         return 'l10n';
     }
 
+    /**
+     * @param string $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
 
     /**
      * @return string
@@ -48,5 +62,23 @@ class L10nExtension extends \Twig_Extension
     public function getL10n($key)
     {
         return $this->l10nProvider->getL10n($key);
+    }
+
+    /**
+     * @return string
+     */
+    public function getL10nCurrency($value, $currency = null)
+    {
+        $fmt = new \NumberFormatter($this->locale, NumberFormatter::CURRENCY);
+        return $fmt->formatCurrency($value, $currency);
+    }
+
+    /**
+     * @return string
+     */
+    public function getL10nNumber($value, $numberFormat = \NumberFormatter::DECIMAL)
+    {
+        $fmt = new NumberFormatter($this->locale, $numberFormat);
+        return $fmt->format($value);
     }
 }
