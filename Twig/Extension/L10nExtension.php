@@ -7,6 +7,7 @@ namespace L10nBundle\Twig\Extension;
 
 
 use L10nBundle\Business\L10nProvider;
+use L10nBundle\Formater\L10nNumberFormater;
 
 class L10nExtension extends \Twig_Extension
 {
@@ -16,21 +17,17 @@ class L10nExtension extends \Twig_Extension
     private $l10nProvider;
 
     /**
-     * @var string
+     * @var L10nNumberFormater
      */
-    private $locale;
-
-    /**
-     * @var string
-     */
-    private $currency;
+    private $l10nNumberFormater;
 
     /**
      * @param L10nProvider $l10nProvider
      */
-    public function __construct(L10nProvider $l10nProvider)
+    public function __construct(L10nProvider $l10nProvider, L10nNumberFormater $l10nNumberFormater)
     {
         $this->l10nProvider = $l10nProvider;
+        $this->l10nNumberFormater = $l10nNumberFormater;
     }
 
     /**
@@ -54,22 +51,6 @@ class L10nExtension extends \Twig_Extension
     }
 
     /**
-     * @param string $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-    }
-
-    /**
-     * @param $currency
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-    }
-
-    /**
      * @return string
      */
     public function getL10n($key)
@@ -82,12 +63,7 @@ class L10nExtension extends \Twig_Extension
      */
     public function getL10nCurrency($value, $currency = null)
     {
-        if (!$currency) {
-            $currency = $this->currency;
-        }
-
-        $fmt = new \NumberFormatter($this->locale, \NumberFormatter::CURRENCY);
-        return $fmt->formatCurrency($value, $currency);
+        return $this->l10nNumberFormater->getL10nCurrency($value, $currency);
     }
 
     /**
@@ -95,7 +71,6 @@ class L10nExtension extends \Twig_Extension
      */
     public function getL10nNumber($value, $numberFormat = \NumberFormatter::DECIMAL)
     {
-        $fmt = new \NumberFormatter($this->locale, $numberFormat);
-        return $fmt->format($value);
+        return $this->l10nNumberFormater->getL10nNumber($value, $numberFormat);
     }
 }
