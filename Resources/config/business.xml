@@ -7,7 +7,6 @@
     <parameters>
             <parameter key="l10n_bundle.business.l10n_provider.class">L10nBundle\Business\L10nProvider</parameter>
             <parameter key="l10n_bundle.business.l10n_exporter.class">L10nBundle\Business\L10nExporter</parameter>       
-            <parameter key="l10n_bundle.formater.l10n_number.class">L10nBundle\Formater\L10nNumberFormater</parameter>
     </parameters>
     <services>
         <service id="l10n_bundle.business.l10n_provider" class="%l10n_bundle.business.l10n_provider.class%">
@@ -19,7 +18,5 @@
             <argument type="service" id="l10n_bundle.l10n_manager" />
             <argument type="service" id="l10n_bundle.manager.jsonld_converter" />
         </service>
-
-        <service id="l10n_bundle.formater.l10n_number" class="%l10n_bundle.formater.l10n_number.class%" />
     </services>
 </container>
