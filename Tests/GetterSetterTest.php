@@ -40,7 +40,8 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                     $this->getMock('L10nBundle\Manager\L10nManagerInterface'),
                     null,
                     null
-            ))
+                )
+            ),
         );
     }
 
