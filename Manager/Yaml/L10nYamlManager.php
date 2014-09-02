@@ -5,6 +5,7 @@ namespace L10nBundle\Manager\Yaml;
 use L10nBundle\Entity\L10nResource;
 use L10nBundle\Manager\L10nManagerInterface;
 use Symfony\Component\Yaml\Yaml;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * @@TODO doc
@@ -22,10 +23,17 @@ class L10nYamlManager implements L10nManagerInterface
     private $catalogue;
 
     /**
-     * @param string $filePath
+     * @var Cache
      */
-    public function __construct($filePath)
+    private $cache;
+
+    /**
+     * @param string $filePath
+     * @param Cache $cache
+     */
+    public function __construct($filePath, Cache $cache)
     {
+        $this->cache = $cache;
         $this->catalogue = $this->buildCatalogue($filePath);
     }
 
@@ -37,14 +45,21 @@ class L10nYamlManager implements L10nManagerInterface
      */
     protected function buildCatalogue($filePath)
     {
-        $parse = Yaml::parse($filePath);
+        $key = 'L10nYamlManager:catalogue:' . $filePath;
 
-        if (!is_array($parse)) {
-            throw new \InvalidArgumentException('file "' . $filePath . '" doesn\'t not exist');
-        }
+        if($this->cache->contains($key)) {
+            $parse = $this->cache->fetch($key);
+        } else {
+            $parse = Yaml::parse($filePath);
 
-        if (!isset($parse[self::ROOT])) {
-            throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
+            if (!is_array($parse)) {
+                throw new \InvalidArgumentException('file "' . $filePath . '" doesn\'t not exist');
+            }
+
+            if (!isset($parse[self::ROOT])) {
+                throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
+            }
+            $this->cache->save($key, $parse);
         }
 
         return $parse[self::ROOT];

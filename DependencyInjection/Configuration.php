@@ -19,6 +19,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('localization_fallback')->isRequired()->end()
                 ->scalarNode('locale_fallback')->isRequired()->end()
                 ->scalarNode('manager')->isRequired()->end()
+                ->scalarNode('cache')->end()
                 ->arrayNode('yaml')
                     ->children()
                         ->scalarNode('data_file')->end()
@@ -33,7 +34,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('database')->end()
                     ->end()
                 ->end()
-
             ->end()
         ;
 

@@ -2,6 +2,8 @@
 
 namespace L10nBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Reference;
+
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -37,8 +39,15 @@ class L10nExtension extends Extension
     {
         $loadDefinitionMethod = 'load' . ucfirst($config['manager']) . 'Manager';
 
+        if (isset($config['cache'])) {
+            $cacheReference = new Reference($config['cache']);
+        } else {
+            // Fallback to Doctrine simple cache
+            $cacheReference = new Reference('doctrine_cache.abstract.array');
+        }
+
         if (method_exists($this, $loadDefinitionMethod)) {
-            $definition = $this->$loadDefinitionMethod($config[$config['manager']], $container);
+            $definition = $this->$loadDefinitionMethod($config[$config['manager']], $container, $cacheReference);
             $container->setDefinition('l10n_bundle.l10n_manager', $definition);
         }
     }
@@ -46,19 +55,24 @@ class L10nExtension extends Extension
     /**
      * @param array $config
      * @param ContainerBuilder $container
+     * @param Reference $cacheReference
      * @return Definition
      */
-    private function loadYamlManager(array $config, ContainerBuilder $container)
+    private function loadYamlManager(array $config, ContainerBuilder $container, Reference $cacheReference)
     {
-        return new Definition('%l10n_bundle.manager.l10n_yaml.class%', $config);
+        $yamlDefinition = new Definition('%l10n_bundle.manager.l10n_yaml.class%', $config);
+        $yamlDefinition->addArgument($cacheReference);
+
+        return $yamlDefinition;
     }
 
     /**
      * @param array $config
      * @param ContainerBuilder $container
+     * @param Reference $cacheReference
      * @return Definition
      */
-    private function loadMongodbManager(array $config, ContainerBuilder $container)
+    private function loadMongodbManager(array $config, ContainerBuilder $container, Reference $cacheReference)
     {
         return new Definition('%l10n_bundle.manager.l10n_mongodb.class%', $config);
     }
