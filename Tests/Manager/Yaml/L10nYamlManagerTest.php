@@ -68,6 +68,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     private $yamlResourceList;
 
     private $l10nManager;
+    private $cache;
 
     public function setUp()
     {
@@ -94,10 +95,15 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 
         $l10nManagerReflection = new \ReflectionClass('L10nBundle\Manager\Yaml\L10nYamlManager');
 
+        $this->cache = $this->getMock(
+            'Doctrine\Common\Cache\Cache',
+            array('contains', 'fetch', 'save')
+            );
+
         $this->l10nManager = $this->getMock(
             'L10nBundle\Manager\Yaml\L10nYamlManager',
             array('buildCatalogue'),
-            array('fake_path'),
+            array('fake_path', $this->cache),
             'L10nYamlManager',
             false
             );
@@ -141,7 +147,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->will($this->returnValue($this->yamlResourceList));
 
-        $l10nManager->__construct($path);
+        $l10nManager->__construct($path, $this->cache);
 
         $this->assertEquals($this->yamlResourceList,
             $l10nManager->getCatalogue());
@@ -156,21 +162,54 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This test check the buildCatalogue() method
+     * Those tests check the buildCatalogue() method
      * It's mocked in all other tests
      */
-    public function testBuildCatalogue()
+    public function testBuildCatalogueNotCached()
     {
-        $l10nManagerReflection = new \ReflectionClass('L10nBundle\Manager\Yaml\L10nYamlManager');
+        $path = '/fake/path';
+        $key = 'L10nYamlManager:catalogue:' . $path;
 
-        $oMethod = $l10nManagerReflection->getMethod('buildCatalogue');
-        $oMethod->setAccessible(true);
-        $result = $oMethod->invoke($this->l10nManager, '/fake/path');
+        $this->cache->expects($this->once())
+            ->method('contains')
+            ->with($key)
+            ->will($this->returnValue(false));
+
+        $this->cache->expects($this->never())
+            ->method('fetch');
+
+        $this->cache->expects($this->once())
+            ->method('save')
+            ->with($key, array(L10nYamlManager::ROOT =>$this->yamlResourceList));
+
+        $result = $this->getResultForTestBuildCatalogue($path);
+        $this->assertEquals($this->yamlResourceList, $result);
+    }
+
+    public function testBuildCatalogueCached()
+    {
+        $path = '/fake/path';
+        $key = 'L10nYamlManager:catalogue:' . $path;
+
+        $this->cache->expects($this->once())
+            ->method('contains')
+            ->with($key)
+            ->will($this->returnValue(true));
+
+        $this->cache->expects($this->once())
+            ->method('fetch')
+            ->with($key)
+            ->will($this->returnValue(array(L10nYamlManager::ROOT =>$this->yamlResourceList)));
+
+        $this->cache->expects($this->never())
+            ->method('save');
+
+        $result = $this->getResultForTestBuildCatalogue($path);
         $this->assertEquals($this->yamlResourceList, $result);
     }
 
     /**
-     * This test seems useless, since hydrate() is already called in other teste methods,
+     * This test seems useless, since hydrate() is already called in other tested methods,
      * But the goal of this test is to point directly on an error in hydrate.
      */
     public function testHydrate()
@@ -183,4 +222,19 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->l10nResource, $result);
     }
 
+    /**
+     * Execute buildCatalogue. Used by testBuildCatalogue with various cache
+     */
+    private function getResultForTestBuildCatalogue($path)
+    {
+        $l10nManagerReflection = new \ReflectionClass('L10nBundle\Manager\Yaml\L10nYamlManager');
+
+        $privateProperty = $l10nManagerReflection->getProperty('cache');
+        $privateProperty->setAccessible(true);
+        $privateProperty->setValue($this->l10nManager , $this->cache);
+
+        $oMethod = $l10nManagerReflection->getMethod('buildCatalogue');
+        $oMethod->setAccessible(true);
+        return $oMethod->invoke($this->l10nManager, $path);
+    }
 }
