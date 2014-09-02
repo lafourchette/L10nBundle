@@ -97,7 +97,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->cache = $this->getMock(
             'Doctrine\Common\Cache\Cache',
-            array('contains', 'fetch', 'save')
+            array('contains', 'fetch', 'save', 'delete', 'getStats')
             );
 
         $this->l10nManager = $this->getMock(
