@@ -6,7 +6,7 @@ use L10nBundle\Exception\ResourceNotFoundException;
 use L10nBundle\Manager\L10nManagerInterface;
 
 /**
- * @@TODO doc
+ * @todo doc
  * @author Cyril Otal
  *
  */
