@@ -6,7 +6,7 @@ use L10nBundle\Exception\ResourceNotFoundException;
 use L10nBundle\Manager\L10nManagerInterface;
 
 /**
- * @@TODO doc
+ * @todo doc
  * @author Cyril Otal
  *
  */
@@ -62,12 +62,13 @@ class L10nProvider
 
     /**
      *
-     * @param string $defaultLocalization
+     * @param  string       $defaultLocalization
      * @return L10nProvider
      */
     public function setDefaultLocalization($defaultLocalization)
     {
         $this->defaultLocalization = $defaultLocalization;
+
         return $this;
     }
 
@@ -82,12 +83,13 @@ class L10nProvider
 
     /**
      *
-     * @param string $defaultLocale
+     * @param  string       $defaultLocale
      * @return L10nProvider
      */
     public function setDefaultLocale($defaultLocale)
     {
         $this->defaultLocale = $defaultLocale;
+
         return $this;
     }
 
@@ -98,6 +100,7 @@ class L10nProvider
     public function setFallbackLocale($fallbackLocale)
     {
         $this->fallbackLocale = $fallbackLocale;
+
         return $this;
     }
 
@@ -116,6 +119,7 @@ class L10nProvider
     public function setFallbackLocalization($fallbackLocalization)
     {
         $this->fallbackLocalization = $fallbackLocalization;
+
         return $this;
     }
 
@@ -129,9 +133,9 @@ class L10nProvider
 
     /**
      * Return a localised value
-     * @param mixed $idResource
-     * @param mixed $idLocalization
-     * @param string $locale
+     * @param  mixed                     $idResource
+     * @param  mixed                     $idLocalization
+     * @param  string                    $locale
      * @return string
      * @throws ResourceNotFoundException
      */
@@ -145,6 +149,7 @@ class L10nProvider
         }
 
         $resource = $this->getResourceOrFallbackResource($idResource, $idLocalization);
+
         return $resource->getValue($locale, $this->fallbackLocale);
     }
 
