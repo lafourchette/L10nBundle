@@ -43,7 +43,7 @@ class L10nExtension extends Extension
             $cacheReference = new Reference($config['cache']);
         } else {
             // Fallback to Doctrine simple cache
-            $cacheReference = new Reference('doctrine_cache.abstract.array');
+            $cacheReference = new Reference('simple_cache');
         }
 
         if (method_exists($this, $loadDefinitionMethod)) {

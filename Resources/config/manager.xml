@@ -9,9 +9,12 @@
             <parameter key="l10n_bundle.manager.l10n_mongodb.class">L10nBundle\Manager\MongoDb\L10nMongoDbManager</parameter>
             
             <parameter key="l10n_bundle.manager.jsonld_converter.class">L10nBundle\Manager\JsonLd\L10nJsonLdConverter</parameter>
+            
+            <parameter key="simple_cache.class">Doctrine\Common\Cache\ArrayCache</parameter>
     </parameters>
         
     <services>
         <service id="l10n_bundle.manager.jsonld_converter" class="%l10n_bundle.manager.jsonld_converter.class%" />
+        <service id="simple_cache" class="%simple_cache.class%" />
     </services>
 </container>
