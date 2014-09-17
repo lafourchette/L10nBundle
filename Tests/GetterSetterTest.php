@@ -8,23 +8,24 @@ namespace L10nBundle;
  */
 class GetterSetterTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Some couples of data, indexed by type
      * If a setter need a type not provided here, the test is skipped
+     *
      * @var array
      */
-    public $valueList = array (
-            'string' => array('first_value', 'other_value'),
-            'array' => array(
-                    array(1, 2),
-                    array('a', 'b'),
-            )
+    public $valueList = array(
+        'string' => array('first_value', 'other_value'),
+        'array'  => array(
+            array(1, 2),
+            array('a', 'b'),
+        )
     );
 
     /**
      * List of classes to test, with there constructors' mocked arguments
      * In PHP >= 5.4, constructors' arguments could be avoided thanks to newInstanceWithoutConstructor method.
+     *
      * @return array
      */
     public function getClass()
@@ -33,7 +34,7 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
             array(
                 'L10nBundle\Entity\L10nResource',
                 array()
-                ),
+            ),
             array(
                 'L10nBundle\Business\L10nProvider',
                 array(
@@ -47,17 +48,17 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getClass
+     *
+     * @param mixed $class
+     * @param array $constructorParameterList
      */
     public function testGetterAndSetter($class, $constructorParameterList)
     {
-
         $reflexionClass = new \ReflectionClass($class);
 
-        if ($reflexionClass->getConstructor())
-        {
+        if ($reflexionClass->getConstructor()) {
             $instance = $reflexionClass->newInstanceArgs($constructorParameterList);
-        } else
-        {
+        } else {
             $instance = $reflexionClass->newInstance();
         }
 
@@ -88,6 +89,11 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param \ReflectionMethod $method
+     *
+     * @return string
+     */
     public function guessParamType(\ReflectionMethod $method)
     {
         $parameterList = $method->getParameters();
@@ -96,9 +102,10 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
         if ($class) {
             return $class->getName();
         }
-        if($var->isArray()) {
+        if ($var->isArray()) {
             return 'array';
         }
+
         return 'string';
     }
 }

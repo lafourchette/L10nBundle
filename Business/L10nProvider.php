@@ -7,8 +7,8 @@ use L10nBundle\Manager\L10nManagerInterface;
 
 /**
  * @todo doc
- * @author Cyril Otal
  *
+ * @author Cyril Otal
  */
 class L10nProvider
 {
@@ -18,13 +18,11 @@ class L10nProvider
     protected $l10nManager;
 
     /**
-     *
      * @var string
      */
     protected $defaultLocalization;
 
     /**
-     *
      * @var string
      */
     protected $defaultLocale;
@@ -41,8 +39,8 @@ class L10nProvider
 
     /**
      * @param L10nManagerInterface $l10nManager
-     * @param $fallbackLocalization
-     * @param $fallbackLocale
+     * @param                      $fallbackLocalization
+     * @param                      $fallbackLocale
      */
     public function __construct(L10nManagerInterface $l10nManager, $fallbackLocalization, $fallbackLocale)
     {
@@ -52,7 +50,6 @@ class L10nProvider
     }
 
     /**
-     *
      * @return string
      */
     public function getDefaultLocalization()
@@ -61,8 +58,8 @@ class L10nProvider
     }
 
     /**
+     * @param string $defaultLocalization
      *
-     * @param  string       $defaultLocalization
      * @return L10nProvider
      */
     public function setDefaultLocalization($defaultLocalization)
@@ -73,7 +70,6 @@ class L10nProvider
     }
 
     /**
-     *
      * @return string
      */
     public function getDefaultLocale()
@@ -82,8 +78,8 @@ class L10nProvider
     }
 
     /**
+     * @param string $defaultLocale
      *
-     * @param  string       $defaultLocale
      * @return L10nProvider
      */
     public function setDefaultLocale($defaultLocale)
@@ -95,6 +91,7 @@ class L10nProvider
 
     /**
      * @param $fallbackLocale
+     *
      * @return $this
      */
     public function setFallbackLocale($fallbackLocale)
@@ -113,7 +110,8 @@ class L10nProvider
     }
 
     /**
-     * @param $fallbackLocale
+     * @param $fallbackLocalization
+     *
      * @return $this
      */
     public function setFallbackLocalization($fallbackLocalization)
@@ -133,9 +131,11 @@ class L10nProvider
 
     /**
      * Return a localised value
-     * @param  mixed                     $idResource
-     * @param  mixed                     $idLocalization
-     * @param  string                    $locale
+     *
+     * @param mixed  $idResource
+     * @param mixed  $idLocalization
+     * @param string $locale
+     *
      * @return string
      * @throws ResourceNotFoundException
      */
@@ -156,6 +156,7 @@ class L10nProvider
     /**
      * @param $idResource
      * @param $idLocalization
+     *
      * @return \L10nBundle\Entity\L10nResource
      * @throws \L10nBundle\Exception\ResourceNotFoundException
      */

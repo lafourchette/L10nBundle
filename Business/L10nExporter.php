@@ -6,9 +6,9 @@ use L10nBundle\Manager\L10nManagerInterface;
 use L10nBundle\Manager\L10nConverterInterface;
 
 /**
- * @@TODO doc
- * @author Cyril Otal
+ * @todo doc
  *
+ * @author Cyril Otal
  */
 class L10nExporter
 {
@@ -23,9 +23,8 @@ class L10nExporter
     protected $l10nConverter;
 
     /**
-     * @param L10nManagerInterface $l10nManager
+     * @param L10nManagerInterface   $l10nManager
      * @param L10nConverterInterface $l10nConverter
-     * @parem string $exportDir
      */
     public function __construct(L10nManagerInterface $l10nManager, L10nConverterInterface $l10nConverter)
     {
@@ -35,6 +34,7 @@ class L10nExporter
 
     /**
      * Export L10nResources in the given filename
+     *
      * @param string $filePath name of the export file
      */
     public function exportAllL10nResourceList($filePath = '')

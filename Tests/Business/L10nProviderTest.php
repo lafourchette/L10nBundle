@@ -3,25 +3,29 @@
 namespace L10nBundle\Business;
 
 use L10nBundle\Entity\L10nResource;
-use L10nBundle\Exception\ResourceNotFoundException;
 use L10nBundle\Manager\L10nManagerInterface;
-use L10nBundle\Business\L10nProvider;
 
 /**
  * @author Cyril Otal
- *
  */
 class L10nProviderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $l10nManager;
+    /** @var L10nManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $l10nManager;
 
     public function setUp()
     {
-        $this->l10nManager = $this->getMock('L10nBundle\Manager\L10nManagerInterface', array(
-            'getL10nResource',
-            'setL10nResource',
-            'getAllL10nResourceList'
-        ), array(), '', false);
+        $this->l10nManager = $this->getMock(
+            'L10nBundle\Manager\L10nManagerInterface',
+            array(
+                'getL10nResource',
+                'setL10nResource',
+                'getAllL10nResourceList'
+            ),
+            array(),
+            '',
+            false
+        );
     }
 
     public function testGetL10nWithAllArgs()
@@ -31,12 +35,12 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $locale = 'fr-FR';
         $expected = 'my-value';
 
-
         $l10nResource = new L10nResource();
-        $l10nResource->setValueList(array(
-            $locale => $expected
-        ));
-
+        $l10nResource->setValueList(
+            array(
+                $locale => $expected
+            )
+        );
 
         $this->l10nManager
             ->expects($this->once())
@@ -59,12 +63,12 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $locale = 'fr-FR';
         $expected = 'my-value';
 
-
         $l10nResource = new L10nResource();
-        $l10nResource->setValueList(array(
-            $locale => $expected
-        ));
-
+        $l10nResource->setValueList(
+            array(
+                $locale => $expected
+            )
+        );
 
         $this->l10nManager
             ->expects($this->once())
@@ -91,12 +95,12 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $localeFallback = 'en-GB';
         $expected = 'my-value';
 
-
         $l10nResource = new L10nResource();
-        $l10nResource->setValueList(array(
-            $localeFallback => $expected
-        ));
-
+        $l10nResource->setValueList(
+            array(
+                $localeFallback => $expected
+            )
+        );
 
         $this->l10nManager
             ->expects($this->at(0))
@@ -119,7 +123,6 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $value);
     }
 
-
     public function testGetL10nWithExistingResourceWithoutTranslationFallback()
     {
         $key = 'key';
@@ -127,9 +130,11 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $locale = 'fr-FR';
 
         $l10nResource = new L10nResource();
-        $l10nResource->setValueList(array(
-            'not-FOUND' => 'value'
-        ));
+        $l10nResource->setValueList(
+            array(
+                'not-FOUND' => 'value'
+            )
+        );
         $l10nResource->setIdResource($key);
 
         $this->l10nManager
@@ -181,10 +186,8 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $locale = 'fr-FR';
         $expected = 'my-value';
 
-
         $l10nResource = new L10nResource();
         $l10nResource->setValueList(array($expected));
-
 
         $this->l10nManager
             ->expects($this->once())

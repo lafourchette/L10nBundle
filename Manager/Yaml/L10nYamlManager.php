@@ -7,9 +7,8 @@ use L10nBundle\Manager\L10nManagerInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @@TODO doc
+ * @todo   doc
  * @author Cyril Otal
- *
  */
 class L10nYamlManager implements L10nManagerInterface
 {
@@ -17,6 +16,7 @@ class L10nYamlManager implements L10nManagerInterface
 
     /**
      * Catalogue file
+     *
      * @var array
      */
     private $catalogue;
@@ -31,7 +31,9 @@ class L10nYamlManager implements L10nManagerInterface
 
     /**
      * Parse the YAML file and return an array of data
+     *
      * @param string $filePath
+     *
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -50,12 +52,14 @@ class L10nYamlManager implements L10nManagerInterface
         return $parse[self::ROOT];
     }
 
-   /**
-    * Return a L10nResource
-    * @param $idResource
-    * @param $idLocalization
-    * @return L10nResource $l10nResource | null
-    */
+    /**
+     * Return a L10nResource
+     *
+     * @param $idResource
+     * @param $idLocalization
+     *
+     * @return L10nResource|null $l10nResource
+     */
     public function getL10nResource($idResource, $idLocalization)
     {
         $values = array();
@@ -80,7 +84,8 @@ class L10nYamlManager implements L10nManagerInterface
 
     /**
      * Return all L10nResources
-     * @return array<L10nResource> $l10nResource
+     *
+     * @return L10nResource[] $l10nResource
      */
     public function getAllL10nResourceList()
     {
@@ -98,6 +103,7 @@ class L10nYamlManager implements L10nManagerInterface
                 }
             }
         }
+
         return $l10nResourceList;
     }
 
@@ -105,7 +111,8 @@ class L10nYamlManager implements L10nManagerInterface
      * Dummy method to respect interface
      *
      * @param L10nResource $l10nResource
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function setL10nResource(L10nResource $l10nResource)
     {
@@ -114,9 +121,11 @@ class L10nYamlManager implements L10nManagerInterface
 
     /**
      * Build a L10nResource
+     *
      * @param $idLocalization
      * @param $idResource
      * @param $valueList
+     *
      * @return L10nResource
      */
     protected function hydrate($idLocalization, $idResource, $valueList)
@@ -125,6 +134,7 @@ class L10nYamlManager implements L10nManagerInterface
         $l10nResource->setIdLocalization($idLocalization);
         $l10nResource->setIdResource($idResource);
         $l10nResource->setValueList($valueList);
+
         return $l10nResource;
     }
 

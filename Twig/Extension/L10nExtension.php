@@ -1,12 +1,12 @@
 <?php
-/**
- * @author: Olivier Versane
- */
 
 namespace L10nBundle\Twig\Extension;
 
 use L10nBundle\Business\L10nProvider;
 
+/**
+ * @author Olivier Versane
+ */
 class L10nExtension extends \Twig_Extension
 {
     /**
@@ -41,11 +41,12 @@ class L10nExtension extends \Twig_Extension
     }
 
     /**
+     * @param string $key
+     *
      * @return string
      */
     public function getL10n($key)
     {
         return $this->l10nProvider->getL10n($key);
     }
-
 }

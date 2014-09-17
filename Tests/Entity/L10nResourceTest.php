@@ -2,27 +2,23 @@
 
 namespace L10nBundle\Entity;
 
-use L10nBundle\Entity\L10nResource;
-use L10nBundle\Exception\ResourceNotFoundException;
-use L10nBundle\Manager\L10nManagerInterface;
-use L10nBundle\Business\L10nProvider;
-
 /**
  * @author Cyril Otal
- *
  */
 class L10nResourceTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     *
      * @var string
      */
-    protected $key = 'some_key';
+    private $key = 'some_key';
 
     /**
-     *
      * @dataProvider getData
+     *
+     * @param string[] $valueList
+     * @param string   $locale
+     * @param string   $fallbackLocale
+     * @param string   $return
      */
     public function testGetValue($valueList, $locale, $fallbackLocale, $return)
     {
@@ -32,33 +28,36 @@ class L10nResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($return, $l10nResource->getValue($locale, $fallbackLocale));
     }
 
-   public function getData()
-   {
-       return array(
-           array(
-               array('+330102'),
-               'fr',
-               'es',
-               '+330102'
-               ),
-           array(
-               array('fr' => 'valeur', 'en' => 'value'),
-               'fr',
-               'es',
-               'valeur'
-               ),
-           array(
-               array('fr' => 'valeur', 'en' => 'value'),
-               'ja',
-               'en',
-               'value'
-               ),
-           array(
-               array('fr' => 'valeur', 'en' => 'value'),
-               'ja',
-               'es',
-               $this->key
-               ),
-           );
-   }
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return array(
+            array(
+                array('+330102'),
+                'fr',
+                'es',
+                '+330102'
+            ),
+            array(
+                array('fr' => 'valeur', 'en' => 'value'),
+                'fr',
+                'es',
+                'valeur'
+            ),
+            array(
+                array('fr' => 'valeur', 'en' => 'value'),
+                'ja',
+                'en',
+                'value'
+            ),
+            array(
+                array('fr' => 'valeur', 'en' => 'value'),
+                'ja',
+                'es',
+                $this->key
+            ),
+        );
+    }
 }

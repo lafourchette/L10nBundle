@@ -2,18 +2,21 @@
 
 namespace L10nBundle\Manager;
 
+use L10nBundle\Entity\L10nResource;
+
 /**
- * @@TODO doc
- * @author Cyril Otal
+ * @todo doc
  *
+ * @author Cyril Otal
  */
 interface L10nConverterInterface
 {
-
-   /**
-    * Convert a list of L10nResources
-    * @param array(L10nResources) $l10nResourceList
-    * @return string
-    */
+    /**
+     * Convert a list of L10nResources
+     *
+     * @param L10nResource[] $l10nResourceList
+     *
+     * @return string
+     */
     public function convertL10nResourceList(array $l10nResourceList);
 }
