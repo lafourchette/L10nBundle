@@ -16,9 +16,9 @@ class L10nExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('manager.xml');
         $loader->load('business.xml');
         $loader->load('twig.xml');
@@ -44,8 +44,9 @@ class L10nExtension extends Extension
     }
 
     /**
-     * @param array $config
+     * @param array            $config
      * @param ContainerBuilder $container
+     *
      * @return Definition
      */
     private function loadYamlManager(array $config, ContainerBuilder $container)
@@ -54,8 +55,9 @@ class L10nExtension extends Extension
     }
 
     /**
-     * @param array $config
+     * @param array            $config
      * @param ContainerBuilder $container
+     *
      * @return Definition
      */
     private function loadMongodbManager(array $config, ContainerBuilder $container)

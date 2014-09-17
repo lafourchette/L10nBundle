@@ -5,6 +5,13 @@ namespace Symfony\Component\Yaml;
 
 class Yaml
 {
+    /**
+     * @param      $input
+     * @param bool $exceptionOnInvalidType
+     * @param bool $objectSupport
+     *
+     * @return array
+     */
     public static function parse($input, $exceptionOnInvalidType = false, $objectSupport = false)
     {
         // return static data, for tests
@@ -12,10 +19,10 @@ class Yaml
             'l10n' => array(
                 'key' => array
                 (
-                    'idLoc'  =>  array
+                    'idLoc' => array
                     (
-                     'fr-FR' => 'autre value fr',
-                     'en-GB' => 'other value en'
+                        'fr-FR' => 'autre value fr',
+                        'en-GB' => 'other value en'
                     )
                 )
             )
@@ -23,29 +30,23 @@ class Yaml
     }
 }
 
-
 /* Test */
 
 namespace L10nBundle\Manager\Yaml;
 
 use L10nBundle\Entity\L10nResource;
-use L10nBundle\Manager\Yaml\L10nYamlManager;
 
 /**
  * @author Cyril Otal
- *
  */
 class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     *
      * @var L10nResource
      */
     private $l10nResource;
 
     /**
-     *
      * @var string
      */
     private $idResource = 'key';
@@ -56,25 +57,26 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     private $idLocalization = 'idLoc';
 
     /**
-     *
      * @var array
      */
     private $valueList;
 
     /**
-     *
      * @var array
      */
     private $yamlResourceList;
 
+    /**
+     * @var L10nYamlManager|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $l10nManager;
 
     public function setUp()
     {
         $this->l10nResource = new L10nResource();
-        $this->valueList = array (
-                'fr-FR' => 'autre value fr',
-                'en-GB' => 'other value en'
+        $this->valueList    = array(
+            'fr-FR' => 'autre value fr',
+            'en-GB' => 'other value en'
         );
         $this->l10nResource->setIdLocalization($this->idLocalization);
         $this->l10nResource->setIdResource($this->idResource);
@@ -100,11 +102,11 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
             array('fake_path'),
             'L10nYamlManager',
             false
-            );
+        );
 
         $privateProperty = $l10nManagerReflection->getProperty('catalogue');
         $privateProperty->setAccessible(true);
-        $privateProperty->setValue($this->l10nManager , $this->yamlResourceList);
+        $privateProperty->setValue($this->l10nManager, $this->yamlResourceList);
     }
 
     public function testGetL10nResource()
@@ -125,16 +127,17 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
         $path = 'yet/another/fake/path';
 
         $l10nManagerReflection = new \ReflectionClass('L10nBundle\Manager\Yaml\L10nYamlManager');
-        $method = $l10nManagerReflection->getMethod('buildCatalogue');
+        $method                = $l10nManagerReflection->getMethod('buildCatalogue');
         $method->setAccessible(true);
 
+        /** @var L10nYamlManager|\PHPUnit_Framework_MockObject_MockObject $l10nManager */
         $l10nManager = $this->getMock(
             'L10nBundle\Manager\Yaml\L10nYamlManager',
             array('buildCatalogue'),
             array($path),
             'L10nYamlManager',
             false
-            );
+        );
 
         $l10nManager->expects($this->once())
             ->method('buildCatalogue')
@@ -143,12 +146,14 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
 
         $l10nManager->__construct($path);
 
-        $this->assertEquals($this->yamlResourceList,
-            $l10nManager->getCatalogue());
+        $this->assertEquals(
+            $this->yamlResourceList,
+            $l10nManager->getCatalogue()
+        );
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testSetL10nResource()
     {
@@ -170,7 +175,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This test seems useless, since hydrate() is already called in other teste methods,
+     * This test seems useless, since hydrate() is already called in other test methods,
      * But the goal of this test is to point directly on an error in hydrate.
      */
     public function testHydrate()
@@ -182,5 +187,4 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
         $result = $oMethod->invoke($this->l10nManager, $this->idLocalization, $this->idResource, $this->valueList);
         $this->assertEquals($this->l10nResource, $result);
     }
-
 }

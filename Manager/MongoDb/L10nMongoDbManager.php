@@ -6,13 +6,12 @@ use L10nBundle\Entity\L10nResource;
 use L10nBundle\Manager\L10nManagerInterface;
 
 /**
- * @@TODO doc
- * @author Cyril Otal
+ * @todo doc
  *
+ * @author Cyril Otal
  */
 class L10nMongoDbManager implements L10nManagerInterface
 {
-
     /**
      * @var \MongoClient
      */
@@ -22,7 +21,6 @@ class L10nMongoDbManager implements L10nManagerInterface
      * @var \MongoDB
      */
     protected $db;
-
 
     /**
      * @param string $host
@@ -34,25 +32,27 @@ class L10nMongoDbManager implements L10nManagerInterface
     public function __construct($host, $port, $username, $password, $database)
     {
         $this->mongoClient = new \MongoClient('mongodb://' . $username . ':' . $password . '@' . $host . ':' . $port);
-        $this->db = $this->mongoClient->selectDB($database);
+        $this->db          = $this->mongoClient->selectDB($database);
     }
 
-   /**
-    * Return a L10nResource
-    * @param $idResource
-    * @param $idLocalization
-    * @return L10nResource $l10nResource
-    */
+    /**
+     * Return a L10nResource
+     *
+     * @param $idResource
+     * @param $idLocalization
+     *
+     * @return L10nResource $l10nResource
+     */
     public function getL10nResource($idResource, $idLocalization)
     {
         $l10nCollection = $this->db->L10nResource;
-        $query = array('id_resource' => (string)$idResource, 'id_localization' => (string)$idLocalization);
-        $l10nResult = $l10nCollection->findOne($query);
+        $query          = array('id_resource' => (string) $idResource, 'id_localization' => (string) $idLocalization);
+        $l10nResult     = $l10nCollection->findOne($query);
 
         $l10nResource = null;
 
         if (count($l10nResult)) {
-            $valueList = array();
+            $valueList       = array();
             $valueListResult = $l10nResult['value_list'];
             foreach ($valueListResult as $value) {
                 if (isset($value['language'])) {
@@ -72,17 +72,19 @@ class L10nMongoDbManager implements L10nManagerInterface
 
     /**
      * Return all L10nResources
-     * @return array<L10nResource> $l10nResource
+     *
+     * @return L10nResource[] $l10nResource
      */
     public function getAllL10nResourceList()
     {
         $l10nCollection = $this->db->L10nResource;
+        /** @var array $l10nResultList */
         $l10nResultList = $l10nCollection->find();
 
         $l10nResourceList = array();
         if (count($l10nResultList)) {
             foreach ($l10nResultList as $l10nResult) {
-                $valueList = array();
+                $valueList       = array();
                 $valueListResult = $l10nResult['value_list'];
                 foreach ($valueListResult as $value) {
                     if (isset($value['language'])) {
@@ -105,36 +107,36 @@ class L10nMongoDbManager implements L10nManagerInterface
     /**
      * Update a L10nResource
      *
-     * @param L10nResource $l10nResource
-     *     which valueList is a list of values. array('value') if not internationnalised, array('locale_code' => 'value', …) if internationnalised
+     * @param L10nResource $l10nResource which valueList is a list of values.
+     *                                   array('value') if not internationalized,
+     *                                   array('locale_code' => 'value', …) if internationalized
      */
     public function setL10nResource(L10nResource $l10nResource)
     {
 
-        $idResource = $l10nResource->getIdResource();
+        $idResource     = $l10nResource->getIdResource();
         $idLocalization = $l10nResource->getIdLocalization();
-        $valueList = $l10nResource->getValueList();
+        $valueList      = $l10nResource->getValueList();
         $valueMongoList = array();
         foreach ($valueList as $locale => $value) {
             if ($locale) {
                 $valueMongoList[] = array(
-                            'language' => $locale,
-                            'value' => $value
-                        );
+                    'language' => $locale,
+                    'value'    => $value
+                );
             } else {
                 $valueMongoList[] = array($value);
             }
         }
         $l10nCollection = $this->db->L10nResource;
         $l10nCollection->update(
-                array('id_resource' => (string)$idResource, 'id_localization' => (string)$idLocalization),
-                array(
-                        'id_resource' => (string)$idResource,
-                        'id_localization' => (string)$idLocalization,
-                        'value_list' => $valueMongoList
-                    ),
-                array('upsert' => true)
-            );
+            array('id_resource' => (string) $idResource, 'id_localization' => (string) $idLocalization),
+            array(
+                'id_resource'     => (string) $idResource,
+                'id_localization' => (string) $idLocalization,
+                'value_list'      => $valueMongoList
+            ),
+            array('upsert' => true)
+        );
     }
-
 }
