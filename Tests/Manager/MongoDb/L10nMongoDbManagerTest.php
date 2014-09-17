@@ -45,7 +45,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Mongo extension is not loaded');
         }
 
-        $this->idResource     = 'key';
+        $this->idResource = 'key';
         $this->idLocalization = 'idLoc';
 
         $this->l10nResult = array(
@@ -147,7 +147,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $l10nMongoDbManagerReflection = new \ReflectionClass('L10nBundle\Manager\MongoDb\L10nMongoDbManager');
-        $prop                         = $l10nMongoDbManagerReflection->getProperty('db');
+        $prop = $l10nMongoDbManagerReflection->getProperty('db');
         $prop->setAccessible(true);
         $prop->setValue($this->l10nManager, $mongoDb);
     }

@@ -97,8 +97,8 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
     public function guessParamType(\ReflectionMethod $method)
     {
         $parameterList = $method->getParameters();
-        $var           = $parameterList[0];
-        $class         = $var->getClass();
+        $var = $parameterList[0];
+        $class = $var->getClass();
         if ($class) {
             return $class->getName();
         }

@@ -33,11 +33,11 @@ class L10nJsonLdConverter implements L10nConverterInterface
         $c = 0;
         if (count($l10nResourceList)) {
             foreach ($l10nResourceList as $l10nResource) {
-                $bNode      = new IRI('_' . $c);
+                $bNode = new IRI('_' . $c);
                 $quadList[] = new Quad($bNode, new IRI(self::NS . 'key'), new IRI($l10nResource->getIdResource()));
                 $quadList[] =
                     new Quad($bNode, new IRI(self::NS . 'localization'), new IRI($l10nResource->getIdLocalization()));
-                $valueList  = $l10nResource->getValueList();
+                $valueList = $l10nResource->getValueList();
                 foreach ($valueList as $locale => $value) {
                     if (!is_int($locale)) {
                         $value .= '@' . $locale;
@@ -49,7 +49,7 @@ class L10nJsonLdConverter implements L10nConverterInterface
             }
         }
 
-        $jsonLd    = JsonLD::fromRdf($quadList);
+        $jsonLd = JsonLD::fromRdf($quadList);
         $compacted =
             JsonLD::compact($jsonLd, '{"@context": {"l10n" : "' . self::NS . '"}}', array('compactArrays' => false));
 

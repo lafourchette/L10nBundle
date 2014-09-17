@@ -30,10 +30,10 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetL10nWithAllArgs()
     {
-        $key          = 'key';
+        $key = 'key';
         $localization = 'fr';
-        $locale       = 'fr-FR';
-        $expected     = 'my-value';
+        $locale = 'fr-FR';
+        $expected = 'my-value';
 
         $l10nResource = new L10nResource();
         $l10nResource->setValueList(
@@ -58,10 +58,10 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetL10nWithDefaultLocaleAndDefaultLocalization()
     {
-        $key          = 'key';
+        $key = 'key';
         $localization = 'fr';
-        $locale       = 'fr-FR';
-        $expected     = 'my-value';
+        $locale = 'fr-FR';
+        $expected = 'my-value';
 
         $l10nResource = new L10nResource();
         $l10nResource->setValueList(
@@ -88,12 +88,12 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetL10nWithFallbacks()
     {
-        $key                  = 'key';
-        $localization         = 'fr';
+        $key = 'key';
+        $localization = 'fr';
         $localizationFallback = 'en';
-        $locale               = 'fr-FR';
-        $localeFallback       = 'en-GB';
-        $expected             = 'my-value';
+        $locale = 'fr-FR';
+        $localeFallback = 'en-GB';
+        $expected = 'my-value';
 
         $l10nResource = new L10nResource();
         $l10nResource->setValueList(
@@ -125,9 +125,9 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetL10nWithExistingResourceWithoutTranslationFallback()
     {
-        $key          = 'key';
+        $key = 'key';
         $localization = 'fr';
-        $locale       = 'fr-FR';
+        $locale = 'fr-FR';
 
         $l10nResource = new L10nResource();
         $l10nResource->setValueList(
@@ -153,11 +153,11 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetL10nWithKeyNotFoundThrowsExceptionNotFound()
     {
-        $key                  = 'key';
-        $localization         = 'fr';
+        $key = 'key';
+        $localization = 'fr';
         $localizationFallback = 'en';
-        $locale               = 'fr-FR';
-        $localeFallback       = 'en-GB';
+        $locale = 'fr-FR';
+        $localeFallback = 'en-GB';
 
         $this->l10nManager
             ->expects($this->at(0))
@@ -181,10 +181,10 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetL10nWithNoLocale()
     {
-        $key          = 'key';
+        $key = 'key';
         $localization = 'fr';
-        $locale       = 'fr-FR';
-        $expected     = 'my-value';
+        $locale = 'fr-FR';
+        $expected = 'my-value';
 
         $l10nResource = new L10nResource();
         $l10nResource->setValueList(array($expected));

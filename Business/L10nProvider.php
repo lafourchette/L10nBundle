@@ -44,9 +44,9 @@ class L10nProvider
      */
     public function __construct(L10nManagerInterface $l10nManager, $fallbackLocalization, $fallbackLocale)
     {
-        $this->l10nManager          = $l10nManager;
+        $this->l10nManager = $l10nManager;
         $this->fallbackLocalization = $fallbackLocalization;
-        $this->fallbackLocale       = $fallbackLocale;
+        $this->fallbackLocale = $fallbackLocale;
     }
 
     /**
@@ -58,7 +58,7 @@ class L10nProvider
     }
 
     /**
-     * @param  string $defaultLocalization
+     * @param string $defaultLocalization
      *
      * @return L10nProvider
      */
@@ -78,7 +78,7 @@ class L10nProvider
     }
 
     /**
-     * @param  string $defaultLocale
+     * @param string $defaultLocale
      *
      * @return L10nProvider
      */

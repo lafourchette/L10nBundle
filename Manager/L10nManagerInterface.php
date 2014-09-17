@@ -24,7 +24,7 @@ interface L10nManagerInterface
     /**
      * Return all L10nResources
      *
-     * @return array<L10nResource> $l10nResource
+     * @return L10nResource[] $l10nResource
      */
     public function getAllL10nResourceList();
 

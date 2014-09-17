@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="l10n_bundle.manager.jsonld_converter.class">L10nBundle\Manager\JsonLd\L10nJsonLdConverter</parameter>
+        <parameter key="l10n_bundle.manager.jsonld_converter.class">L10nBundle\Manager\JsonLd\L10nJsonLdConverter
+        </parameter>
     </parameters>
     <services>
-        <service id="l10n_bundle.manager.jsonld_converter" class="%l10n_bundle.manager.jsonld_converter.class%" />
+        <service id="l10n_bundle.manager.jsonld_converter" class="%l10n_bundle.manager.jsonld_converter.class%"/>
     </services>
 </container>

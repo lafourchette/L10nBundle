@@ -32,7 +32,7 @@ class L10nMongoDbManager implements L10nManagerInterface
     public function __construct($host, $port, $username, $password, $database)
     {
         $this->mongoClient = new \MongoClient('mongodb://' . $username . ':' . $password . '@' . $host . ':' . $port);
-        $this->db          = $this->mongoClient->selectDB($database);
+        $this->db = $this->mongoClient->selectDB($database);
     }
 
     /**
@@ -46,13 +46,13 @@ class L10nMongoDbManager implements L10nManagerInterface
     public function getL10nResource($idResource, $idLocalization)
     {
         $l10nCollection = $this->db->L10nResource;
-        $query          = array('id_resource' => (string) $idResource, 'id_localization' => (string) $idLocalization);
-        $l10nResult     = $l10nCollection->findOne($query);
+        $query = array('id_resource' => (string) $idResource, 'id_localization' => (string) $idLocalization);
+        $l10nResult = $l10nCollection->findOne($query);
 
         $l10nResource = null;
 
         if (count($l10nResult)) {
-            $valueList       = array();
+            $valueList = array();
             $valueListResult = $l10nResult['value_list'];
             foreach ($valueListResult as $value) {
                 if (isset($value['language'])) {
@@ -84,7 +84,7 @@ class L10nMongoDbManager implements L10nManagerInterface
         $l10nResourceList = array();
         if (count($l10nResultList)) {
             foreach ($l10nResultList as $l10nResult) {
-                $valueList       = array();
+                $valueList = array();
                 $valueListResult = $l10nResult['value_list'];
                 foreach ($valueListResult as $value) {
                     if (isset($value['language'])) {
@@ -114,9 +114,9 @@ class L10nMongoDbManager implements L10nManagerInterface
     public function setL10nResource(L10nResource $l10nResource)
     {
 
-        $idResource     = $l10nResource->getIdResource();
+        $idResource = $l10nResource->getIdResource();
         $idLocalization = $l10nResource->getIdLocalization();
-        $valueList      = $l10nResource->getValueList();
+        $valueList = $l10nResource->getValueList();
         $valueMongoList = array();
         foreach ($valueList as $locale => $value) {
             if ($locale) {

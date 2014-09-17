@@ -74,7 +74,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->l10nResource = new L10nResource();
-        $this->valueList    = array(
+        $this->valueList = array(
             'fr-FR' => 'autre value fr',
             'en-GB' => 'other value en'
         );
@@ -127,7 +127,7 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
         $path = 'yet/another/fake/path';
 
         $l10nManagerReflection = new \ReflectionClass('L10nBundle\Manager\Yaml\L10nYamlManager');
-        $method                = $l10nManagerReflection->getMethod('buildCatalogue');
+        $method = $l10nManagerReflection->getMethod('buildCatalogue');
         $method->setAccessible(true);
 
         /** @var L10nYamlManager|\PHPUnit_Framework_MockObject_MockObject $l10nManager */
@@ -142,7 +142,8 @@ class L10nYamlManagerTest extends \PHPUnit_Framework_TestCase
         $l10nManager->expects($this->once())
             ->method('buildCatalogue')
             ->with($path)
-            ->will($this->returnValue($this->yamlResourceList));
+            ->will($this->returnValue($this->yamlResourceList))
+        ;
 
         $l10nManager->__construct($path);
 

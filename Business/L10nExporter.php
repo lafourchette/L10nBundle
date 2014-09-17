@@ -28,7 +28,7 @@ class L10nExporter
      */
     public function __construct(L10nManagerInterface $l10nManager, L10nConverterInterface $l10nConverter)
     {
-        $this->l10nManager   = $l10nManager;
+        $this->l10nManager = $l10nManager;
         $this->l10nConverter = $l10nConverter;
     }
 
@@ -40,8 +40,8 @@ class L10nExporter
     public function exportAllL10nResourceList($filePath = '')
     {
         $l10nResourceList = $this->l10nManager->getAllL10nResourceList();
-        $output           = $this->l10nConverter->convertL10nResourceList($l10nResourceList);
-        $f                = fopen($filePath, 'w+');
+        $output = $this->l10nConverter->convertL10nResourceList($l10nResourceList);
+        $f = fopen($filePath, 'w+');
         fwrite($f, $output);
     }
 }

@@ -9,8 +9,8 @@
     </parameters>
     <services>
         <service id="l10n_bundle.twig.extension.l10n" class="%l10n_bundle.twig.extension.l10n.class%">
-            <argument type="service" id="l10n_bundle.business.l10n_provider" />
-            <tag name="twig.extension" />
+            <argument type="service" id="l10n_bundle.business.l10n_provider"/>
+            <tag name="twig.extension"/>
         </service>
     </services>
 

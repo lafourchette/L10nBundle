@@ -15,10 +15,10 @@ class L10nJsonLdConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertL10nResourceList()
     {
         $l10nResourceList = array();
-        $l10nResource     = new L10nResource();
+        $l10nResource = new L10nResource();
         $l10nResource->setIdLocalization('Montpellier');
         $l10nResource->setIdResource('Address');
-        $valueList          = array();
+        $valueList = array();
         $valueList['fr-FR'] = 'rue';
         $valueList['en-GB'] = 'street';
         $l10nResource->setValueList($valueList);
@@ -49,7 +49,7 @@ class L10nJsonLdConverterTest extends \PHPUnit_Framework_TestCase
         }
 
         $l10nJsonLdConverter = new L10nJsonLdConverter();
-        $result              = $l10nJsonLdConverter->convertL10nResourceList($l10nResourceList);
+        $result = $l10nJsonLdConverter->convertL10nResourceList($l10nResourceList);
         $this->assertEquals($expected, $result);
     }
 }
