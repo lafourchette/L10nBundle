@@ -4,6 +4,7 @@ namespace L10nBundle\Manager\Yaml;
 
 use L10nBundle\Entity\L10nResource;
 use L10nBundle\Manager\L10nManagerInterface;
+use L10nBundle\Utils\Helper\L10nCatalogueHelper;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -12,44 +13,20 @@ use Symfony\Component\Yaml\Yaml;
  */
 class L10nYamlManager implements L10nManagerInterface
 {
-    const ROOT = 'l10n';
-
     /**
-     * Catalogue file
+     * Catalogue of resource_key, localisation_key, value
      *
      * @var array
      */
     private $catalogue;
 
     /**
-     * @param string $filePath
+     * @param L10nCatalogueHelper $catalogueHelper
+     * @param array               $config
      */
-    public function __construct($filePath)
+    public function __construct(L10nCatalogueHelper $catalogueHelper, array $config)
     {
-        $this->catalogue = $this->buildCatalogue($filePath);
-    }
-
-    /**
-     * Parse the YAML file and return an array of data
-     *
-     * @param string $filePath
-     *
-     * @return array
-     * @throws \InvalidArgumentException
-     */
-    protected function buildCatalogue($filePath)
-    {
-        $parse = Yaml::parse($filePath);
-
-        if (!is_array($parse)) {
-            throw new \InvalidArgumentException('file "' . $filePath . '" doesn\'t not exist');
-        }
-
-        if (!isset($parse[self::ROOT])) {
-            throw new \InvalidArgumentException('Missing "' . self::ROOT . '" entry');
-        }
-
-        return $parse[self::ROOT];
+        $this->catalogue = $catalogueHelper->createCatalogue($config);
     }
 
     /**
@@ -120,6 +97,14 @@ class L10nYamlManager implements L10nManagerInterface
     }
 
     /**
+     * @return array
+     */
+    public function getCatalogue()
+    {
+        return $this->catalogue;
+    }
+
+    /**
      * Build a L10nResource
      *
      * @param $idLocalization
@@ -136,13 +121,5 @@ class L10nYamlManager implements L10nManagerInterface
         $l10nResource->setValueList($valueList);
 
         return $l10nResource;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCatalogue()
-    {
-        return $this->catalogue;
     }
 }

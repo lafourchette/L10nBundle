@@ -13,7 +13,8 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('l10n_bundle');
+        $rootNode = $treeBuilder->root('l10n');
+
         $rootNode
             ->children()
                 ->scalarNode('localization_fallback')->isRequired()->end()
@@ -33,7 +34,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('database')->end()
                     ->end()
                 ->end()
-
             ->end()
         ;
 
