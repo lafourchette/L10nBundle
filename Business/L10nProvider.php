@@ -4,6 +4,7 @@ namespace L10nBundle\Business;
 
 use L10nBundle\Exception\ResourceNotFoundException;
 use L10nBundle\Manager\L10nManagerInterface;
+use L10nBundle\Utils\Resolver\L10nResolver;
 
 /**
  * @todo doc
@@ -13,9 +14,14 @@ use L10nBundle\Manager\L10nManagerInterface;
 class L10nProvider
 {
     /**
-     * @var L10nManagerInterface $l10nManager
+     * @var L10nManagerInterface
      */
     protected $l10nManager;
+
+    /**
+     * @var L10nResolver
+     */
+    protected $l10nResolver;
 
     /**
      * @var string
@@ -39,12 +45,18 @@ class L10nProvider
 
     /**
      * @param L10nManagerInterface $l10nManager
-     * @param                      $fallbackLocalization
-     * @param                      $fallbackLocale
+     * @param L10nResolver         $l10nResolver
+     * @param string               $fallbackLocalization
+     * @param string               $fallbackLocale
      */
-    public function __construct(L10nManagerInterface $l10nManager, $fallbackLocalization, $fallbackLocale)
-    {
+    public function __construct(
+        L10nManagerInterface $l10nManager,
+        L10nResolver $l10nResolver,
+        $fallbackLocalization,
+        $fallbackLocale
+    ) {
         $this->l10nManager = $l10nManager;
+        $this->l10nResolver = $l10nResolver;
         $this->fallbackLocalization = $fallbackLocalization;
         $this->fallbackLocale = $fallbackLocale;
     }
@@ -149,8 +161,9 @@ class L10nProvider
         }
 
         $resource = $this->getResourceOrFallbackResource($idResource, $idLocalization);
+        $value = $resource->getValue($locale, $this->fallbackLocale);
 
-        return $resource->getValue($locale, $this->fallbackLocale);
+        return $this->l10nResolver->resolve($value);
     }
 
     /**
