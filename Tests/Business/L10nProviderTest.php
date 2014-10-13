@@ -4,6 +4,7 @@ namespace L10nBundle\Business;
 
 use L10nBundle\Entity\L10nResource;
 use L10nBundle\Manager\L10nManagerInterface;
+use L10nBundle\Utils\Resolver\L10nResolver;
 
 /**
  * @author Cyril Otal
@@ -12,6 +13,9 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var L10nManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $l10nManager;
+
+    /** @var L10nResolver|\PHPUnit_Framework_MockObject_MockObject */
+    private $l10nResolver;
 
     public function setUp()
     {
@@ -26,6 +30,14 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->l10nResolver = $this->getMock(
+            'L10nBundle\Utils\Resolver\L10nResolver',
+            array('resolve'),
+            array(),
+            '',
+            false
+        );
     }
 
     public function testGetL10nWithAllArgs()
@@ -33,7 +45,8 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
         $key = 'key';
         $localization = 'fr';
         $locale = 'fr-FR';
-        $expected = 'my-value';
+        $expected = '%my-value%';
+        $resolvedExpected = 'my-value';
 
         $l10nResource = new L10nResource();
         $l10nResource->setValueList(
@@ -49,11 +62,18 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($l10nResource))
         ;
 
-        $l10nProvider = new L10nProvider($this->l10nManager, 'xx', 'xx-XX');
+        $this->l10nResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expected)
+            ->will($this->returnValue($resolvedExpected))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, $this->l10nResolver, 'xx', 'xx-XX');
 
         $value = $l10nProvider->getL10n($key, $localization, $locale);
 
-        $this->assertEquals($expected, $value);
+        $this->assertEquals($resolvedExpected, $value);
     }
 
     public function testGetL10nWithDefaultLocaleAndDefaultLocalization()
@@ -77,7 +97,14 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($l10nResource))
         ;
 
-        $l10nProvider = new L10nProvider($this->l10nManager, 'xx', 'xx-XX');
+        $this->l10nResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expected)
+            ->will($this->returnValue($expected))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, $this->l10nResolver, 'xx', 'xx-XX');
         $l10nProvider->setDefaultLocale($locale);
         $l10nProvider->setDefaultLocalization($localization);
 
@@ -116,7 +143,14 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($l10nResource))
         ;
 
-        $l10nProvider = new L10nProvider($this->l10nManager, $localizationFallback, $localeFallback);
+        $this->l10nResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expected)
+            ->will($this->returnValue($expected))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, $this->l10nResolver, $localizationFallback, $localeFallback);
 
         $value = $l10nProvider->getL10n($key, $localization, $locale);
 
@@ -144,7 +178,14 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($l10nResource))
         ;
 
-        $l10nProvider = new L10nProvider($this->l10nManager, 'en', 'en-GB');
+        $this->l10nResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($key)
+            ->will($this->returnValue($key))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, $this->l10nResolver, 'en', 'en-GB');
 
         $value = $l10nProvider->getL10n($key, $localization, $locale);
 
@@ -173,7 +214,7 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null))
         ;
 
-        $l10nProvider = new L10nProvider($this->l10nManager, $localizationFallback, $localeFallback);
+        $l10nProvider = new L10nProvider($this->l10nManager, $this->l10nResolver, $localizationFallback, $localeFallback);
 
         $this->setExpectedException('\L10nBundle\Exception\ResourceNotFoundException');
         $l10nProvider->getL10n($key, $localization, $locale);
@@ -196,7 +237,14 @@ class L10nProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($l10nResource))
         ;
 
-        $l10nProvider = new L10nProvider($this->l10nManager, 'xx', 'xx-XX');
+        $this->l10nResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expected)
+            ->will($this->returnValue($expected))
+        ;
+
+        $l10nProvider = new L10nProvider($this->l10nManager, $this->l10nResolver, 'xx', 'xx-XX');
 
         $value = $l10nProvider->getL10n($key, $localization, $locale);
 

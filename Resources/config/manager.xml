@@ -10,6 +10,7 @@
 
         <parameter key="l10n_bundle.manager.jsonld_converter.class">L10nBundle\Manager\JsonLd\L10nJsonLdConverter</parameter>
     </parameters>
+
     <services>
         <service id="l10n_bundle.manager.jsonld_converter" class="%l10n_bundle.manager.jsonld_converter.class%"/>
     </services>

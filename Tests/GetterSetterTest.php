@@ -39,6 +39,7 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                 'L10nBundle\Business\L10nProvider',
                 array(
                     $this->getMock('L10nBundle\Manager\L10nManagerInterface'),
+                    $this->getMock('L10nBundle\Utils\Resolver\L10nResolver', null, array(), '', false),
                     null,
                     null
                 )
