@@ -75,7 +75,8 @@ class L10nCatalogueHelper
     {
         if (is_array($config)) {
             $associativeKeysCount = count(array_filter(array_keys($config), 'is_string'));
-            return $associativeKeysCount > 0 ? false : true;
+
+            return $associativeKeysCount === 0;
         }
 
         return true;
