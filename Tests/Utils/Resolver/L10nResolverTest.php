@@ -42,22 +42,32 @@ class L10nResolverTest extends \PHPUnit_Framework_TestCase
         ;
     }
 
-    public function testResolve()
+    /**
+     * @dataProvider getDataForResolve
+     */
+    public function testResolve($value, $expectedValue, $isResolveStringCalled)
     {
-        $value = 'test_string_input';
-        $expectedValue = 'test_string_output';
-
-        $this->parameterBag
-            ->expects($this->once())
-            ->method('resolveString')
-            ->with($value)
-            ->will($this->returnValue($expectedValue))
-        ;
+    	if ($isResolveStringCalled) {
+        	$this->parameterBag
+	            ->expects($this->once())
+	            ->method('resolveString')
+	            ->with($value)
+	            ->will($this->returnValue($expectedValue))
+        	;
+    	}
 
         $resolver = new L10nResolver($this->container);
 
         $resultValue = $resolver->resolve($value);
 
         $this->assertSame($expectedValue, $resultValue);
+    }
+
+    public function getDataForResolve()
+    {
+    	return array(
+    		array('test_string_input', 'test_string_output', true),
+    		array(array(), null, false),
+    	);
     }
 }
