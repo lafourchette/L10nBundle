@@ -30,6 +30,9 @@ class L10nCatalogueHelperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function createCatalogueProvider()
     {
         return array(
@@ -38,19 +41,11 @@ class L10nCatalogueHelperTest extends \PHPUnit_Framework_TestCase
                 array(),
             ),
             array(
-                array (1, 2, 3, 42),
-                array (),
+                array(1, 2, 3, 42),
+                array(),
             ),
             array(
-                array ('1' => 1, '2' => 2),
-                array (),
-            ),
-            array(
-                array(
-                    'resource' => array(
-                        'country' => 42
-                    ),
-                ),
+                array('1' => 1, '2' => 2),
                 array(),
             ),
             array(
@@ -60,7 +55,7 @@ class L10nCatalogueHelperTest extends \PHPUnit_Framework_TestCase
                             array('locale' => 'toto', 'not_value' => 'toto'),
                             array('not_locale' => 'toto', 'value' => 'toto'),
                             array('locale' => 42, 'value' => 'toto'),
-                            array('locale' => 42, 'value' => array()),
+                            array('locale' => '42', 'value' => array()),
                         ),
                     ),
                 ),
@@ -88,7 +83,7 @@ class L10nCatalogueHelperTest extends \PHPUnit_Framework_TestCase
                             ),
                             'sub2' => array(
                                 'fr' => 'trololo sub2 fr',
-                                'en' => 'trololo sub2 en',
+                                'en' => false,
                                 'es' => 42,
                             ),
                         ),
@@ -110,6 +105,7 @@ class L10nCatalogueHelperTest extends \PHPUnit_Framework_TestCase
                         'fr' => array(
                             'fr' => 'trololo sub1 fr fr',
                             'en' => 'trololo sub1 fr en',
+                            'es' => 42,
                         ),
                         'es' => array(
                             'fr' => 'trololo sub1 es fr',
@@ -118,14 +114,15 @@ class L10nCatalogueHelperTest extends \PHPUnit_Framework_TestCase
                     ),
                     'titi.trololo.sub2' => array(
                         'fr' => 'trololo sub2 fr',
-                        'en' => 'trololo sub2 en',
+                        'en' => false,
+                        'es' => 42,
                     ),
-                    'titi.tralala' => array(
+                    'titi.tralala'      => array(
                         'fr' => array('fr' => 'tralala fr fr'),
                         'en' => 'tralala en',
                         'es' => 'tralala es',
                     ),
-                    'tata' => array(
+                    'tata'              => array(
                         'zz' => 'toto',
                         'aa' => '42',
                     ),

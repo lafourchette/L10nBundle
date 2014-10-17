@@ -11,14 +11,14 @@ class L10nCatalogueHelper
     const VALUE_KEY = 'value';
 
     /**
-     * Transforms the config into a two dimensional array where a
-     * final element is a string or an array of translation.
+     * Transforms the config into a two dimensional array where a final element is a boolean, string or numeric value or
+     * an array of translations.
      * This is done by grouping first keys with dots in order to create
      * the idResource. The idLocalization is kept.
      *
      * It drops the elements that do not have the good structure.
      *
-     * @param        $config
+     * @param array  $config
      * @param string $prefixKey
      *
      * @return array
@@ -50,7 +50,7 @@ class L10nCatalogueHelper
      * The level is 0 if the config is a leaf.
      * The level of an array is the max of the level of its elements plus one.
      *
-     * @param $config
+     * @param array $config
      *
      * @return integer
      */
@@ -65,7 +65,7 @@ class L10nCatalogueHelper
 
     /**
      * Returns true if the given config is a leaf.
-     * A leaf is either a string value or a non associative array.
+     * A leaf is either a boolean, string or numeric value or a non associative array.
      *
      * @param mixed $config
      *
@@ -105,7 +105,8 @@ class L10nCatalogueHelper
      * Formats the given array to be in the format of a catalogue resource.
      * A catalogue resource is the value (array) corresponding to a reource id.
      * The format is an associative array of value.
-     * A value is either a string or an associative array where each value is a string.
+     * A value is either a boolean, string or numeric value or an associative array where each value is a boolean,
+     * string or numeric value.
      *
      * The value that cannot be matched in this format are dropped.
      *
@@ -123,7 +124,7 @@ class L10nCatalogueHelper
                 if (count($formattedLeafArray) > 0) {
                     $formattedResourceArray[$key] = $formattedLeafArray;
                 }
-            } elseif (is_string($leaf)) {
+            } else {
                 $formattedResourceArray[$key] = $leaf;
             }
         }
@@ -133,11 +134,11 @@ class L10nCatalogueHelper
 
     /**
      * Formats the given array to be in the format of a leaf.
-     * A leaf that is an array is an associative array with string values.
+     * A leaf that is an array is an associative array with boolean, string or numeric values.
      * The input format is a non associative array of associative array.
      * Each associative array must contain:
      * a string value for the key LOCALE_KEY which is the locale in the formatted array
-     * and a string value for the key VALUE_KEY which is the value in the formatted array.
+     * and a boolean, string or numeric value for the key VALUE_KEY which is the value in the formatted array.
      *
      * The value that cannot be matched in this format are dropped
      *
@@ -158,7 +159,7 @@ class L10nCatalogueHelper
             $locale = $leafElement[self::LOCALE_KEY];
             $value = $leafElement[self::VALUE_KEY];
 
-            if (!is_string($locale) || !is_string($value)) {
+            if (!is_string($locale) || is_array($value)) {
                 continue;
             }
 
