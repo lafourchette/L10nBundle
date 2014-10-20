@@ -15,6 +15,9 @@ class L10nResolver
      */
     protected $parameterBag;
 
+    /**
+     * @param Container $container
+     */
     public function __construct(Container $container)
     {
         $parameterBag = $container->getParameterBag();
@@ -26,13 +29,13 @@ class L10nResolver
     /**
      * Resolves a value containing parameters to a plain value.
      *
-     * @param string $value
+     * @param mixed $value
      *
-     * @return string|null
+     * @return mixed
      */
     public function resolve($value)
     {
-        if (is_string($value)) {
+        if (!is_array($value)) {
             return $this->parameterBag->resolveValue($value);
         }
 

@@ -8,10 +8,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 class L10nResolverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Container|\PHPUnit_Framework_MockObject_MockObject */
+
+    /**
+     * @var Container|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $container;
 
-    /** @var ParameterBag|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ParameterBag|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $parameterBag;
 
     public function setUp()
@@ -25,7 +30,7 @@ class L10nResolverTest extends \PHPUnit_Framework_TestCase
             'Symfony\Component\DependencyInjection\ParameterBag\ParameterBag',
             array(
                 'resolve',
-                'resolveString',
+                'resolveValue',
             )
         );
 
@@ -44,17 +49,21 @@ class L10nResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForResolve
+     *
+     * @param mixed $value
+     * @param mixed $expectedValue
+     * @param bool  $isResolveValueCalled
      */
-    public function testResolve($value, $expectedValue, $isResolveStringCalled)
+    public function testResolve($value, $expectedValue, $isResolveValueCalled)
     {
-    	if ($isResolveStringCalled) {
-        	$this->parameterBag
-	            ->expects($this->once())
-	            ->method('resolveString')
-	            ->with($value)
-	            ->will($this->returnValue($expectedValue))
-        	;
-    	}
+        if ($isResolveValueCalled) {
+            $this->parameterBag
+                ->expects($this->once())
+                ->method('resolveValue')
+                ->with($value)
+                ->will($this->returnValue($expectedValue))
+            ;
+        }
 
         $resolver = new L10nResolver($this->container);
 
@@ -63,11 +72,16 @@ class L10nResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedValue, $resultValue);
     }
 
+    /**
+     * @return array
+     */
     public function getDataForResolve()
     {
-    	return array(
-    		array('test_string_input', 'test_string_output', true),
-    		array(array(), null, false),
-    	);
+        return array(
+            array('test_string_input', 'test_string_output', true),
+            array(true, true, true),
+            array(42, 42, true),
+            array(array(), null, false),
+        );
     }
 }
