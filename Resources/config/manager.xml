@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="l10n_bundle.manager.l10n_yaml.class">L10nBundle\Manager\Yaml\L10nYamlManager</parameter>
         <parameter key="l10n_bundle.manager.l10n_mongodb.class">L10nBundle\Manager\MongoDb\L10nMongoDbManager</parameter>
-
+        <parameter key="l10n_bundle.manager.l10n_mysql.class">L10nBundle\Manager\MySql\L10nMySqlManager</parameter>
         <parameter key="l10n_bundle.manager.jsonld_converter.class">L10nBundle\Manager\JsonLd\L10nJsonLdConverter</parameter>
     </parameters>
 

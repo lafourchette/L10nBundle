@@ -113,7 +113,6 @@ class L10nMongoDbManager implements L10nManagerInterface
      */
     public function setL10nResource(L10nResource $l10nResource)
     {
-
         $idResource = $l10nResource->getIdResource();
         $idLocalization = $l10nResource->getIdLocalization();
         $valueList = $l10nResource->getValueList();
