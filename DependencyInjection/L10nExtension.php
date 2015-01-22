@@ -77,4 +77,15 @@ class L10nExtension extends Extension
     {
         return new Definition('%l10n_bundle.manager.l10n_mongodb.class%', $config);
     }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     *
+     * @return Definition
+     */
+    private function loadMysqlManager(array $config, ContainerBuilder $container)
+    {
+    	return new Definition('%l10n_bundle.manager.l10n_mysql.class%', $config);
+    }
 }

@@ -34,6 +34,16 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('database')->end()
                     ->end()
                 ->end()
+                ->arrayNode('mysql')
+	                ->children()
+		                ->scalarNode('host')->end()
+		                ->scalarNode('port')->end()
+		                ->scalarNode('username')->end()
+		                ->scalarNode('password')->end()
+		                ->scalarNode('database')->end()
+		                ->scalarNode('table')->end()
+	                ->end()
+                ->end()
             ->end()
         ;
 

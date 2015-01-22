@@ -21,7 +21,8 @@
         "symfony/yaml": "*",
         "ml/json-ld": "1.*",
         "twig/extensions": "*",
-        "twig/twig": "~1.13"
+        "twig/twig": "~1.13",
+        "doctrine/dbal": "2.4.3"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
