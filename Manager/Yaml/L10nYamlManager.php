@@ -8,7 +8,7 @@ use L10nBundle\Utils\Helper\L10nCatalogueHelper;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Manager pluged on a YAML page
+ * Manager plugged on a YAML page
  * @author Cyril Otal
  */
 class L10nYamlManager implements L10nManagerInterface
