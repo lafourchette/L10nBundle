@@ -7,7 +7,8 @@ use L10nBundle\Manager\L10nManagerInterface;
 use L10nBundle\Utils\Resolver\L10nResolver;
 
 /**
- * @todo doc
+ * Class with all methods to retrieve L10nResources,
+ * including fallback managment
  *
  * @author Cyril Otal
  */
@@ -142,7 +143,7 @@ class L10nProvider
     }
 
     /**
-     * Return a localised value
+     * Return a localized value
      *
      * @param mixed  $idResource
      * @param mixed  $idLocalization

@@ -6,7 +6,7 @@ use L10nBundle\Entity\L10nResource;
 use L10nBundle\Manager\L10nManagerInterface;
 
 /**
- * @todo doc
+ * Manager pluged on a MySQL database
  *
  * @author Cyril Otal
  */

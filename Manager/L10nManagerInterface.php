@@ -5,7 +5,7 @@ namespace L10nBundle\Manager;
 use L10nBundle\Entity\L10nResource;
 
 /**
- * @todo doc
+ * Interface for all methods a Manager must provide
  *
  * @author Cyril Otal
  */
