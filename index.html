@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="L10nbundle : ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>L10nbundle</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/lafourchette/L10nBundle">View on GitHub</a>
+
+          <h1 id="project_title">L10nbundle</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/lafourchette/L10nBundle/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/lafourchette/L10nBundle/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="l10nbundle" class="anchor" href="#l10nbundle" aria-hidden="true"><span class="octicon octicon-link"></span></a>L10nBundle</h1>
+
+<p><a href="https://travis-ci.org/lafourchette/L10nBundle"><img src="https://travis-ci.org/lafourchette/L10nBundle.svg?branch=master" alt="Build Status"></a> <a href="https://scrutinizer-ci.com/g/lafourchette/L10nBundle/"><img src="https://scrutinizer-ci.com/g/lafourchette/L10nBundle/badges/quality-score.png?s=77af0dc7eed34c47d0b264469ab2031c21d6f968" alt="Scrutinizer Code Quality"></a> <a href="https://scrutinizer-ci.com/g/lafourchette/L10nBundle/"><img src="https://scrutinizer-ci.com/g/lafourchette/L10nBundle/badges/coverage.png?s=d6df93262b412bb71ecb7fd1365077ad919e660a" alt="Code Coverage"></a></p>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>The aim of L10nBundle is to provide a very simple way to deal with L10N, like I18N with <a href="http://symfony.com/doc/current/components/translation/usage.html" title="Using the Translator">Symfony translator</a>.</p>
+
+<p>L10N data can be store wherever you want.
+Currently, L10nBundle supports YaML file and MongoDb.</p>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<h3>
+<a id="global" class="anchor" href="#global" aria-hidden="true"><span class="octicon octicon-link"></span></a>Global</h3>
+
+<pre><code>l10n:
+    localization_fallback: en # Fallback localization, used when no explicit Localization is asked or localization not found. Value may be string or integer
+    locale_fallback: en_US # Fallback locale, to manage L10N values
+    manager: yaml # The name of the manager you want to use currently yaml or mongodb
+</code></pre>
+
+<p>You can use the parameters of your symfony configuration in your values.
+Example:</p>
+
+<pre><code>#parameters.yml
+parameters:
+    my_environment_extension: local
+
+#l10n.yml
+l10n:
+    my_url:
+        gb: www.domain.%my_environment_extension%
+</code></pre>
+
+<p>The value will be resolved like this:</p>
+
+<pre><code>my_url =&gt; www.domain.local
+</code></pre>
+
+<h3>
+<a id="yaml" class="anchor" href="#yaml" aria-hidden="true"><span class="octicon octicon-link"></span></a>yaml</h3>
+
+<pre><code>yaml:
+    data_file: /path/to/main.yaml
+</code></pre>
+
+<h4>
+<a id="you-can-import-files" class="anchor" href="#you-can-import-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>You can import files</h4>
+
+<pre><code>imports:
+    - { resource: "../../src/Bundle/MyBundle/Resources/translations/l10n.yml" }
+</code></pre>
+
+<h4>
+<a id="configuration-is-under-l10n-key" class="anchor" href="#configuration-is-under-l10n-key" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration is under l10n key</h4>
+
+<pre><code>l10n:
+    registration:
+        label:
+            fr: FRA
+            es: SPA
+        name:
+            fr: french name
+            es: spanish name
+</code></pre>
+
+<p>You can use the keys <code>registration.label</code> and <code>registration.name</code>.</p>
+
+<h4>
+<a id="simple-translation-is-provided" class="anchor" href="#simple-translation-is-provided" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple translation is provided</h4>
+
+<p>Use an array as value:</p>
+
+<pre><code>l10n:
+    registration.label:
+        fr:
+            - {locale: fr, value: FRA_fr}
+            - {locale: en, value: FRA_en}
+</code></pre>
+
+<h3>
+<a id="mongodb" class="anchor" href="#mongodb" aria-hidden="true"><span class="octicon octicon-link"></span></a>mongodb</h3>
+
+<pre><code>mongodb:
+    host: 127.0.0.1
+    port: 27017
+    username: test
+    password: T3$t
+    database: test_db
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Example in a controler</p>
+
+<pre><code>$l10n = $this-&gt;getContainer()-&gt;get('l10n_bundle.business.l10n_provider');
+$l10n-&gt;getL10n('key', 'idLoc');
+</code></pre>
+
+<p>In a twig template you can use the l10n filter</p>
+
+<pre><code>{{ 'key'|l10n }}
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">L10nbundle maintained by <a href="https://github.com/lafourchette">lafourchette</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
