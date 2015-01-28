@@ -10,31 +10,6 @@ use L10nBundle\Entity\L10nResource;
 class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
-     */
-    private $idResource;
-
-    /**
-     * @var string
-     */
-    private $idLocalization;
-
-    /**
-     * @var array
-     */
-    private $l10nResult;
-
-    /**
-     * @var array
-     */
-    private $valueList;
-
-    /**
-     * @var L10nResource
-     */
-    private $l10nResource;
-
-    /**
      * @var L10nMongoDbManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $l10nManager;
@@ -45,82 +20,118 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Mongo extension is not loaded');
         }
 
-        $this->idResource = 'key';
-        $this->idLocalization = 'idLoc';
+        $this->l10nManager =
+            $this->getMock('L10nBundle\Manager\MongoDb\L10nMongoDbManager', null, array(), 'L10nMongoDbManager', false);
+    }
 
-        $this->l10nResult = array(
-            'id_resource'     => $this->idResource,
-            'id_localization' => $this->idLocalization,
+    public function dateGetL10nResource()
+    {
+        $idResource = 'key';
+        $idLocalization = 'idLoc';
+
+        $l10nResult = array(
+            'id_resource'     => $idResource,
+            'id_localization' => $idLocalization,
             'value_list'      => array(
                 array('language' => 'fr-FR', 'value' => 'autre value fr'),
                 array('language' => 'en-GB', 'value' => 'other value en')
             )
         );
 
-        $this->valueList = array(
+        $valueList = array(
             'fr-FR' => 'autre value fr',
             'en-GB' => 'other value en'
         );
 
-        $this->l10nResource = new L10nResource();
-        $this->l10nResource->setIdLocalization($this->idLocalization);
-        $this->l10nResource->setIdResource($this->idResource);
-        $this->l10nResource->setValueList($this->valueList);
-        $this->l10nManager =
-            $this->getMock('L10nBundle\Manager\MongoDb\L10nMongoDbManager', null, array(), 'L10nMongoDbManager', false);
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalization($idLocalization);
+        $l10nResource->setIdResource($idResource);
+        $l10nResource->setValueList($valueList);
+
+        $data = array();
+        $data[] = array(
+            $idResource,
+            $idLocalization,
+            $l10nResult,
+            $l10nResource,
+        );
+
+        $value = 'non I18n value';
+        $result = array(
+            'id_resource'     => $idResource,
+            'id_localization' => $idLocalization,
+            'value_list'      => array($value),
+        );
+
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalization($idLocalization);
+        $l10nResource->setIdResource($idResource);
+        $l10nResource->setValueList(array($value));
+
+        $data[] = array(
+            $idResource,
+            $idLocalization,
+            $result,
+            $l10nResource);
+
+        return $data;
     }
 
-    public function testGetL10nResource()
+    /**
+     * @dataProvider dateGetL10nResource
+     */
+    public function testGetL10nResource($idResource, $idLocalization, $requestResult, $resource)
     {
         $l10nCollection = $this->getMock('\MongoCollection', array('findOne'), array(), '', false);
         $l10nCollection
             ->expects($this->once())
             ->method('findOne')
-            ->with(array('id_resource' => $this->idResource, 'id_localization' => $this->idLocalization))
-            ->will($this->returnValue($this->l10nResult))
+            ->with(array('id_resource' => $idResource, 'id_localization' => $idLocalization))
+            ->will($this->returnValue($requestResult))
         ;
 
         $this->configL10nManagerMock($l10nCollection);
 
-        $result = $this->l10nManager->getL10nResource($this->idResource, $this->idLocalization);
+        $result = $this->l10nManager->getL10nResource($idResource, $idLocalization);
 
-        $this->assertEquals($this->l10nResource, $result);
+        $this->assertEquals($resource, $result);
     }
 
-    public function testGetAllL10nResourceList()
+    /**
+     * @dataProvider dateGetL10nResource
+     */
+    public function testGetAllL10nResourceList($idResource, $idLocalization, $requestResult, $resource)
     {
         $l10nCollection = $this->getMock('\MongoCollection', array('find'), array(), '', false);
         $l10nCollection
             ->expects($this->once())
             ->method('find')
             ->with()
-            ->will($this->returnValue(array($this->l10nResult)))
+            ->will($this->returnValue(array($requestResult)))
         ;
 
         $this->configL10nManagerMock($l10nCollection);
 
-        $result = $this->l10nManager->getAllL10nResourceList($this->idResource, $this->idLocalization);
+        $result = $this->l10nManager->getAllL10nResourceList($idResource, $idLocalization);
 
-        $this->assertEquals(array($this->l10nResource), $result);
+        $this->assertEquals(array($resource), $result);
     }
 
-    public function testSetL10nResource()
+    /**
+     * @dataProvider dateGetL10nResource
+     */
+    public function testSetL10nResource($idResource, $idLocalization, $requestResult, $resource)
     {
-        $valueMongoList = array(
-            array('language' => 'fr-FR', 'value' => 'autre value fr'),
-            array('language' => 'en-GB', 'value' => 'other value en')
-        );
-
         $l10nCollection = $this->getMock('\MongoCollection', array('update'), array(), '', false);
         $l10nCollection
             ->expects($this->once())
             ->method('update')
             ->with(
-                array('id_resource' => $this->idResource, 'id_localization' => $this->idLocalization),
+                array('id_resource' => $idResource, 'id_localization' => $idLocalization),
                 array(
-                    'id_resource'     => $this->idResource,
-                    'id_localization' => $this->idLocalization,
-                    'value_list'      => $valueMongoList
+                    'id_resource'     => $idResource,
+                    'id_localization' => $idLocalization,
+                    'value_list'      => $requestResult['value_list'],
                 ),
                 array('upsert' => true)
             )
@@ -128,7 +139,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->configL10nManagerMock($l10nCollection);
 
-        $this->l10nManager->setL10nResource($this->l10nResource);
+        $this->l10nManager->setL10nResource($resource);
     }
 
     /**
