@@ -58,7 +58,7 @@ class L10nMongoDbManager implements L10nManagerInterface
                 if (isset($value['language'])) {
                     $valueList[$value['language']] = $value['value'];
                 } else {
-                    $valueList[] = $value['value'];
+                    $valueList[] = $value;
                 }
             }
             $l10nResource = new L10nResource();
@@ -90,7 +90,7 @@ class L10nMongoDbManager implements L10nManagerInterface
                     if (isset($value['language'])) {
                         $valueList[$value['language']] = $value['value'];
                     } else {
-                        $valueList[] = $value['value'];
+                        $valueList[] = $value;
                     }
                 }
                 $l10nResource = new L10nResource();
@@ -124,7 +124,7 @@ class L10nMongoDbManager implements L10nManagerInterface
                     'value'    => $value
                 );
             } else {
-                $valueMongoList[] = array($value);
+                $valueMongoList[] = $value;
             }
         }
         $l10nCollection = $this->db->L10nResource;
