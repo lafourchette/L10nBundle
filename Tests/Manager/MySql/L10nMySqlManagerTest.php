@@ -11,31 +11,6 @@ use L10nBundle\Entity\L10nResource;
 class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
-     */
-    private $idResource;
-
-    /**
-     * @var string
-     */
-    private $idLocalization;
-
-    /**
-     * @var array
-     */
-    private $l10nResult;
-
-    /**
-     * @var array
-     */
-    private $valueList;
-
-    /**
-     * @var L10nResource
-     */
-    private $l10nResource;
-
-    /**
      * @var L10nMySqlManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $l10nManager;
@@ -53,34 +28,7 @@ class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->table = 'l10n_table';
-        $this->idResource = 'key';
-        $this->idLocalization = 'idLoc';
 
-        $this->l10nResult = array(
-            array(
-                'id_resource' => $this->idResource,
-                'id_localization' => $this->idLocalization,
-                'locale' =>'fr-FR',
-                'value' => 'autre value fr',
-            ),
-            array(
-                'id_resource' => $this->idResource,
-                'id_localization' => $this->idLocalization,
-                'locale' =>'en-GB',
-                'value' => 'other value en',
-            )
-        )
-        ;
-
-        $this->valueList = array(
-            'fr-FR' => 'autre value fr',
-            'en-GB' => 'other value en'
-        );
-
-        $this->l10nResource = new L10nResource();
-        $this->l10nResource->setIdLocalization($this->idLocalization);
-        $this->l10nResource->setIdResource($this->idResource);
-        $this->l10nResource->setValueList($this->valueList);
         $this->l10nManager =
             $this->getMock('L10nBundle\Manager\MySql\L10nMySqlManager', null, array(), 'L10nMySqlManager', false);
 
@@ -88,17 +36,84 @@ class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\stdClass', array('bindValue', 'execute', 'fetch'), array(), '', true);
     }
 
-    public function testGetL10nResource()
+    public function dataGetL10nResource()
+    {
+        $idResource = 'key';
+        $idLocalization = 'idLoc';
+
+        $l10nResult = array(
+            array(
+                'id_resource' => $idResource,
+                'id_localization' => $idLocalization,
+                'locale' => 'fr-FR',
+                'value' => 'autre value fr',
+            ),
+            array(
+                'id_resource' => $idResource,
+                'id_localization' => $idLocalization,
+                'locale' => 'en-GB',
+                'value' => 'other value en',
+            )
+        )
+        ;
+
+        $valueList = array(
+            'fr-FR' => 'autre value fr',
+            'en-GB' => 'other value en'
+        );
+
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalization($idLocalization);
+        $l10nResource->setIdResource($idResource);
+        $l10nResource->setValueList($valueList);
+
+        $data = array();
+        $data[] = array(
+            $idResource,
+            $idLocalization,
+            $l10nResult,
+            $l10nResource,
+        );
+
+        $value = 'non I18n value';
+        $result = array(
+            array(
+                'id_resource' => $idResource,
+                'id_localization' => $idLocalization,
+                'locale' => null,
+                'value' => $value,
+            ),
+        )
+        ;
+
+        $l10nResource = new L10nResource();
+        $l10nResource->setIdLocalization($idLocalization);
+        $l10nResource->setIdResource($idResource);
+        $l10nResource->setValueList(array($value));
+
+        $data[] = array(
+            $idResource,
+            $idLocalization,
+            $result,
+            $l10nResource);
+
+        return $data;
+    }
+
+    /**
+     * @dataProvider dataGetL10nResource
+     */
+    public function testGetL10nResource($idResource, $idLocalization, $requestResult, $resource)
     {
         $this->statement
             ->expects($this->at(0))
             ->method('bindValue')
-            ->with('idResource', $this->idResource)
+            ->with('idResource', $idResource)
         ;
         $this->statement
             ->expects($this->at(1))
             ->method('bindValue')
-            ->with('idLocalization', $this->idLocalization)
+            ->with('idLocalization', $idLocalization)
         ;
 
         $this->statement
@@ -110,16 +125,20 @@ class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(3))
             ->method('fetch')
             ->with(\PDO::FETCH_ASSOC)
-            ->will($this->returnValue($this->l10nResult[0]))
+            ->will($this->returnValue($requestResult[0]))
         ;
+
+        $at = 4;
+        if (isset($requestResult[1])) {
+            $this->statement
+                ->expects($this->at($at++))
+                ->method('fetch')
+                ->with(\PDO::FETCH_ASSOC)
+                ->will($this->returnValue($requestResult[1]))
+            ;
+        }
         $this->statement
-            ->expects($this->at(4))
-            ->method('fetch')
-            ->with(\PDO::FETCH_ASSOC)
-            ->will($this->returnValue($this->l10nResult[1]))
-        ;
-        $this->statement
-            ->expects($this->at(5))
+            ->expects($this->at($at))
             ->method('fetch')
             ->with(\PDO::FETCH_ASSOC)
             ->will($this->returnValue(false))
@@ -131,12 +150,15 @@ class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->configL10nManagerMock($sql, $this->statement);
 
-        $result = $this->l10nManager->getL10nResource($this->idResource, $this->idLocalization);
+        $result = $this->l10nManager->getL10nResource($idResource, $idLocalization);
 
-        $this->assertEquals($this->l10nResource, $result);
+        $this->assertEquals($resource, $result);
     }
 
-    public function testGetAllL10nResourceList()
+    /**
+     * @dataProvider dataGetL10nResource
+     */
+    public function testGetAllL10nResourceList($idResource, $idLocalization, $requestResult, $resource)
     {
         $sql = 'SELECT `id_resource`, `id_localization`, `locale`, `value` FROM '
             . $this->table
@@ -149,16 +171,20 @@ class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('fetch')
             ->with(\PDO::FETCH_ASSOC)
-            ->will($this->returnValue($this->l10nResult[0]))
+            ->will($this->returnValue($requestResult[0]))
         ;
+
+        $at = 2;
+        if (isset($requestResult[1])) {
+            $this->statement
+                ->expects($this->at($at++))
+                ->method('fetch')
+                ->with(\PDO::FETCH_ASSOC)
+                ->will($this->returnValue($requestResult[1]))
+            ;
+        }
         $this->statement
-            ->expects($this->at(2))
-            ->method('fetch')
-            ->with(\PDO::FETCH_ASSOC)
-            ->will($this->returnValue($this->l10nResult[1]))
-        ;
-        $this->statement
-            ->expects($this->at(3))
+            ->expects($this->at($at))
             ->method('fetch')
             ->with(\PDO::FETCH_ASSOC)
             ->will($this->returnValue(false))
@@ -166,22 +192,25 @@ class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->configL10nManagerMock($sql, $this->statement);
 
-        $result = $this->l10nManager->getAllL10nResourceList($this->idResource, $this->idLocalization);
+        $result = $this->l10nManager->getAllL10nResourceList();
 
-        $this->assertEquals(array($this->l10nResource), $result);
+        $this->assertEquals(array($resource), $result);
     }
 
-    public function testSetL10nResource()
+    /**
+     * @dataProvider dataGetL10nResource
+     */
+    public function testSetL10nResource($idResource, $idLocalization, $requestResult, $resource)
     {
         $this->statement
             ->expects($this->at(0))
             ->method('bindValue')
-            ->with('idResource', $this->idResource)
+            ->with('idResource', $idResource)
         ;
         $this->statement
             ->expects($this->at(1))
             ->method('bindValue')
-            ->with('idLocalization', $this->idLocalization)
+            ->with('idLocalization', $idLocalization)
         ;
 
         $this->statement
@@ -193,9 +222,22 @@ class L10nMySqlManagerTest extends \PHPUnit_Framework_TestCase
             . $this->table
             . ' WHERE `id_resource` = :idResource And `id_localization` = :idLocalization ;INSERT into '
             . $this->table
-            . ' (`id_resource`, `id_localization`, `locale`, `value`) VALUES (:idResource, :idLocalization, "fr-FR", "autre value fr"), (:idResource, :idLocalization, "en-GB", "other value en")';
+            . ' (`id_resource`, `id_localization`, `locale`, `value`) VALUES '
+        ;
+
+        $sqlValueList = array();
+        foreach ($requestResult as $resourceData) {
+            $sqlValueList[] = '(:idResource, :idLocalization, '
+                . ($resourceData['locale'] ? '"' . $resourceData['locale'] . '"' : 'null')
+                . ', "'
+                . $resourceData['value']
+                . '")'
+            ;
+        }
+        $sql .= implode(', ', $sqlValueList);
+
         $this->configL10nManagerMock($sql, $this->statement);
-        $this->l10nManager->setL10nResource($this->l10nResource);
+        $this->l10nManager->setL10nResource($resource);
     }
 
     /**
