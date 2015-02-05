@@ -24,7 +24,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('L10nBundle\Manager\MongoDb\L10nMongoDbManager', null, array(), 'L10nMongoDbManager', false);
     }
 
-    public function dateGetL10nResource()
+    public function dataGetL10nResource()
     {
         $idResource = 'key';
         $idLocalization = 'idLoc';
@@ -78,7 +78,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider dateGetL10nResource
+     * @dataProvider dataGetL10nResource
      */
     public function testGetL10nResource($idResource, $idLocalization, $requestResult, $resource)
     {
@@ -98,7 +98,7 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider dateGetL10nResource
+     * @dataProvider dataGetL10nResource
      */
     public function testGetAllL10nResourceList($idResource, $idLocalization, $requestResult, $resource)
     {
@@ -112,13 +112,13 @@ class L10nMongoDbManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->configL10nManagerMock($l10nCollection);
 
-        $result = $this->l10nManager->getAllL10nResourceList($idResource, $idLocalization);
+        $result = $this->l10nManager->getAllL10nResourceList();
 
         $this->assertEquals(array($resource), $result);
     }
 
     /**
-     * @dataProvider dateGetL10nResource
+     * @dataProvider dataGetL10nResource
      */
     public function testSetL10nResource($idResource, $idLocalization, $requestResult, $resource)
     {
