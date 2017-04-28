@@ -80,11 +80,23 @@ Use an array as value:
 Usage
 -----
 
+### PHP
+
 Example in a controler
 
     $l10n = $this->getContainer()->get('l10n_bundle.business.l10n_provider');
     $l10n->getL10n('key', 'idLoc');
 
+### Twig
+
 In a twig template you can use the l10n filter
 
-    {{ 'key'|l10n }}
+```yaml
+{{ 'key'|l10n }}
+```
+
+You can also provide parameters such as the default localization and/or the locale.
+
+```yaml
+{{ 'key'|l10n('es', 'ca') }}
+```
