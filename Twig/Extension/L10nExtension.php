@@ -42,11 +42,13 @@ class L10nExtension extends \Twig_Extension
 
     /**
      * @param string $key
+     * @param string|null $idLocalization
+     * @param string|null $locale
      *
      * @return string
      */
-    public function getL10n($key)
+    public function getL10n($key, $idLocalization = null, $locale = null)
     {
-        return $this->l10nProvider->getL10n($key);
+        return $this->l10nProvider->getL10n($key, $idLocalization, $locale);
     }
 }

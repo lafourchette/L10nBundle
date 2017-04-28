@@ -76,7 +76,7 @@ class YamlL10nLoader extends FileLoader
      *
      * @return array The file content
      */
-    private function loadFile($file)
+    public function loadFile($file)
     {
         if (!$this->supports($file)) {
             throw new FileLoaderLoadException($file);

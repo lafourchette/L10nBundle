@@ -1,41 +1,4 @@
 <?php
-
-/* Static Mocking */
-namespace Symfony\Component\Yaml;
-
-use L10nBundle\Tests\Utils\Loader\Yaml\YamlL10nLoaderTest;
-
-class Yaml
-{
-    /**
-     * @param string $input
-     * @param bool   $exceptionOnInvalidType
-     * @param bool   $objectSupport
-     *
-     * @return array
-     */
-    public static function parse($input, $exceptionOnInvalidType = false, $objectSupport = false)
-    {
-        // return static data, for tests
-        switch ($input) {
-            case YamlL10nLoaderTest::PATH_EMPTY:
-                return YamlL10nLoaderTest::$parseResults[YamlL10nLoaderTest::PATH_EMPTY];
-            case YamlL10nLoaderTest::PATH_NO_IMPORT:
-                return YamlL10nLoaderTest::$parseResults[YamlL10nLoaderTest::PATH_NO_IMPORT];
-            case YamlL10nLoaderTest::FAKE_PATH_1:
-                return YamlL10nLoaderTest::$parseResults[YamlL10nLoaderTest::FAKE_PATH_1];
-            case YamlL10nLoaderTest::FAKE_PATH_2:
-                return YamlL10nLoaderTest::$parseResults[YamlL10nLoaderTest::FAKE_PATH_2];
-            case YamlL10nLoaderTest::PATH_CIRCULAR_REFERENCE_1:
-                return YamlL10nLoaderTest::$parseResults[YamlL10nLoaderTest::PATH_CIRCULAR_REFERENCE_1];
-            case YamlL10nLoaderTest::PATH_CIRCULAR_REFERENCE_2:
-                return YamlL10nLoaderTest::$parseResults[YamlL10nLoaderTest::PATH_CIRCULAR_REFERENCE_2];
-            default:
-                return null;
-        }
-    }
-}
-
 namespace L10nBundle\Tests\Utils\Loader\Yaml;
 
 use L10nBundle\Utils\Loader\Yaml\YamlL10nLoader;
@@ -43,14 +6,10 @@ use Symfony\Component\Config\FileLocator;
 
 class YamlL10nLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    const PATH_INVALID              = '/path/to/invalid.ext';
-    const PATH_THAT_DOES_NOT_EXIST  = '/path/to/file/that/does/not/exist.yml';
     const PATH_EMPTY                = '/path/to/empty.yml';
     const PATH_NO_IMPORT            = '/path/to/no/import.yml';
     const FAKE_PATH_1               = '/fake/path/1.yml';
     const FAKE_PATH_2               = '/fake/path/2.yml';
-    const PATH_CIRCULAR_REFERENCE_1 = '/path/circular/reference/1.yml';
-    const PATH_CIRCULAR_REFERENCE_2 = '/path/circular/reference/2.yml';
 
     public static $parseResults = array(
         self::PATH_EMPTY => array(),
@@ -119,21 +78,7 @@ class YamlL10nLoaderTest extends \PHPUnit_Framework_TestCase
                     ),
                 ),
             ),
-        ),
-        self::PATH_CIRCULAR_REFERENCE_1 => array(
-            'imports' => array(
-                array(
-                    'resource' => self::PATH_CIRCULAR_REFERENCE_2,
-                ),
-            ),
-        ),
-        self::PATH_CIRCULAR_REFERENCE_2 => array(
-            'imports' => array(
-                array(
-                    'resource' => self::PATH_CIRCULAR_REFERENCE_1,
-                ),
-            ),
-        ),
+        )
     );
 
     /** @var FileLocator|\PHPUnit_Framework_MockObject_MockObject */
@@ -152,57 +97,23 @@ class YamlL10nLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $yamlL10nLoaderTest->getConfig());
     }
 
-    public function testLoadFileDoesNotExists()
-    {
-        $yamlL10nLoaderTest = $this->loadSetUp(array(self::PATH_THAT_DOES_NOT_EXIST));
-
-        $this->assertEquals(array(), $yamlL10nLoaderTest->getConfig());
-    }
-
     public function testLoadFileEmpty()
     {
-        $yamlL10nLoaderTest = $this->loadSetUp(array(self::PATH_EMPTY));
+        $yamlL10nLoaderTest = $this->loadSetUp(self::PATH_EMPTY);
 
         $this->assertEquals(array(), $yamlL10nLoaderTest->getConfig());
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Config\Exception\FileLoaderLoadException
-     */
-    public function testLoadInvalid()
-    {
-        $this->loadSetUp(array(self::PATH_INVALID));
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException
-     */
-    public function testLoadCircularReference()
-    {
-        $this->loadSetUp(
-            array(
-                self::PATH_CIRCULAR_REFERENCE_1,
-                self::PATH_CIRCULAR_REFERENCE_2,
-            )
-        );
     }
 
     public function testLoadNoImports()
     {
-        $yamlL10nLoaderTest = $this->loadSetUp(array(self::PATH_NO_IMPORT));
+        $yamlL10nLoaderTest = $this->loadSetUp(self::PATH_NO_IMPORT);
 
         $this->assertEquals(self::$parseResults[self::PATH_NO_IMPORT]['l10n'], $yamlL10nLoaderTest->getConfig());
     }
 
     public function  testLoad()
     {
-        $yamlL10nLoaderTest = $this->loadSetUp(
-            array(
-                self::FAKE_PATH_1,
-                self::FAKE_PATH_2,
-                self::PATH_NO_IMPORT,
-            )
-        );
+        $yamlL10nLoaderTest = $this->loadSetUp(self::PATH_NO_IMPORT);
 
         $expectedConfig = array(
             'idLoc1' => array
@@ -232,7 +143,10 @@ class YamlL10nLoaderTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->assertEquals($expectedConfig, $yamlL10nLoaderTest->getConfig());
+        $loaderConfig = $yamlL10nLoaderTest->getConfig();
+        $loaderConfig = krsort($loaderConfig);
+
+        $this->assertEquals(krsort($expectedConfig), $loaderConfig);
     }
 
     public function testSupports()
@@ -248,25 +162,32 @@ class YamlL10nLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up the locator mock locate method to identity for all given paths.
      *
-     * @param array $paths
+     * @param string $path
      *
      * @return YamlL10nLoader
      */
-    private function loadSetUp(array $paths)
+    private function loadSetUp($path)
     {
         $this->locator->expects($this->any())
             ->method('locate')
-            ->with(call_user_func_array(array($this, 'logicalOr'), $paths))
+            ->with($path)
             ->will(
-                $this->returnCallback(
-                    function ($path) {
-                        return $path;
-                    }
-                )
+                $this->returnValue($path)
             );
 
-        $yamlL10nLoaderTest = new YamlL10nLoader($this->locator);
-        $yamlL10nLoaderTest->load($paths[0]);
+        $yamlL10nLoaderTest = $this->getMock(
+            'L10nBundle\\Utils\\Loader\\Yaml\\YamlL10nLoader',
+            array('loadFile'),
+            array($this->locator)
+        );
+        $yamlL10nLoaderTest
+            ->expects($this->any())
+            ->method('loadFile')
+            ->with($path)
+            ->will($this->returnValue(self::$parseResults[$path]))
+        ;
+
+        $yamlL10nLoaderTest->load($path);
 
         return $yamlL10nLoaderTest;
     }
